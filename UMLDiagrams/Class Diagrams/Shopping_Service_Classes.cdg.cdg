@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Shopping_Service_Classes.cdg">
+  <ClassDiagramComponents>
+    <Class name="Item" package="" visibility="public" xPosition="714.0" yPosition="641.0">
+      <Fields>
+        <Field name="name" type="String" visibility="private"/>
+        <Field name="UUID" type="String" visibility="private"/>
+        <Field name="count" type="Integer" visibility="private"/>
+        <Field name="itemPrice" type="Double" visibility="private"/>
+        <Field name="ID" type="Long" visibility="private"/>
+        <Field name="tags" type="String[]" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods>
+        <Method name="untitledMethod" returnType="void" visibility="public"/>
+      </Methods>
+    </Class>
+    <Interface name="ShoppingService" package="" visibility="public" xPosition="400.0" yPosition="361.0">
+      <Methods>
+        <Method name="getStockedItems" returnType="List&lt;Item&gt;" visibility="public"/>
+        <Method name="purchaseItems" returnType="UserBasket" visibility="public">
+          <Argument type="UserBasket" name="basket"/>
+        </Method>
+        <Method name="getItemByName" returnType="Item" visibility="public"/>
+        <Method name="getItemByUUID" returnType="Item" visibility="public"/>
+      </Methods>
+    </Interface>
+    <Interface name="UserBasket" package="" visibility="public" xPosition="908.0" yPosition="369.0">
+      <Methods>
+        <Method name="getCurrentBasketItems" returnType="List&lt;Item&gt;" visibility="public"/>
+        <Method name="addItemToChar" returnType="Item" visibility="public">
+          <Argument type="Item" name="item"/>
+        </Method>
+        <Method name="removeItem" returnType="String" visibility="public">
+          <Argument type="String" name="itemUUID"/>
+        </Method>
+      </Methods>
+    </Interface>
+    <Class name="WebApp JSP Frontend" package="" visibility="public" xPosition="714.0" yPosition="102.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Invoice" package="" visibility="public" xPosition="320.0" yPosition="599.0">
+      <Fields>
+        <Field name="invoiceUUID" type="String" visibility="private"/>
+        <Field name="dateOfPurchase" type="Date" visibility="private"/>
+        <Field name="totalPrice" type="Double" visibility="private"/>
+        <Field name="purchaseItems" type="List&lt;Item&gt;" visibility="private"/>
+        <Field name="purchaser" type="User" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="User" package="" visibility="public" xPosition="57.0" yPosition="599.0">
+      <Fields>
+        <Field name="roles" type="Roles" visibility="private"/>
+        <Field name="uname" type="String" visibility="private"/>
+        <Field name="hashedPassword" type="String" visibility="private"/>
+        <Field name="firstName" type="String" visibility="private"/>
+        <Field name="secondName" type="String" visibility="private"/>
+        <Field name="address" type="Address" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Enum name="Roles" package="" visibility="public" xPosition="57.0" yPosition="429.0">
+      <Literals>
+        <Literal name="Admin"/>
+        <Literal name="Customer"/>
+      </Literals>
+    </Enum>
+    <Interface name="ItemDatabase" package="" visibility="public" xPosition="719.0" yPosition="839.0">
+      <Methods/>
+    </Interface>
+    <Interface name="InvoiceDatabase" package="" visibility="public" xPosition="340.0" yPosition="763.0">
+      <Methods/>
+    </Interface>
+    <Interface name="UserDatabase" package="" visibility="public" xPosition="78.0" yPosition="780.0">
+      <Methods/>
+    </Interface>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <UseRelation name="Uses Shopping Service" source="WebApp JSP Frontend" target="ShoppingService" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Uses Basket" source="ShoppingService" target="UserBasket" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Uses Items" source="UserBasket" target="Item" sourceCardinality="1..1" targetCardinality="0..*"/>
+    <UseRelation name="Creates " source="ShoppingService" target="Invoice" sourceCardinality="1..1" targetCardinality="0..*"/>
+    <UseRelation name="Shopping Service Uses Item" source="ShoppingService" target="Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="" source="Invoice" target="User" sourceCardinality="1..1" targetCardinality="0..*"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

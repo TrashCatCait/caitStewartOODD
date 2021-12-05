@@ -1,4 +1,4 @@
-package com.solent.cait.oodd;
+package com.solent.cait.oodd.service;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

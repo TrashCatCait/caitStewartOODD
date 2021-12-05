@@ -1,79 +1,217 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+      
+  
   <modelVersion>4.0.0</modelVersion>
+      
+  
   <groupId>com.solent.cait.oodd</groupId>
+      
+  
   <artifactId>caitStewartOODD</artifactId>
+      
+  
   <version>1.0-SNAPSHOT</version>
+      
+  
   <packaging>pom</packaging>
+      
+  
   <!-- FIXME change it to the project's website -->
+      
+  
   <url>http://www.example.com</url>
-
-      <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
-
+          
+  
+  <properties>
+                
+    
+    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+                
+    
+    <maven.compiler.source>1.8</maven.compiler.source>
+                
+    
+    <maven.compiler.target>1.8</maven.compiler.target>
+            
+  
+  </properties>
+      
+  
   <dependencies>
-            <dependency>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-dependencies</artifactId>
-                <version>2.4.4</version>
-                <type>pom</type>
-            </dependency>
+                    
+    
     <dependency>
-      <groupId>junit</groupId>
-      <artifactId>junit</artifactId>
-      <version>4.11</version>
-      <scope>test</scope>
+                            
+      
+      <groupId>org.springframework.boot</groupId>
+                            
+      
+      <artifactId>spring-boot-dependencies</artifactId>
+                            
+      
+      <version>2.4.4</version>
+                            
+      
+      <type>pom</type>
+                        
+    
     </dependency>
+            
+    
+    <dependency>
+                  
+      
+      <groupId>junit</groupId>
+                  
+      
+      <artifactId>junit</artifactId>
+                  
+      
+      <version>4.11</version>
+                  
+      
+      <scope>test</scope>
+                
+    
+    </dependency>
+          
+  
   </dependencies>
+      
+  
   
   <modules>
+            
+    
     <module>models</module>
+            
+    
     <module>dao</module>
+            
+    
     <module>service</module>
+            
+    
     <module>web</module>
-    <module>bank</module>    
+            
+    
+    <module>bank</module>
+            
+    
+    
+    <module>security</module>
+          
+    
+    <module>dto</module>
+      
   </modules>
+      
+    
   
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.springframework.boot</groupId>
-                <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.4.4</version>
-            </plugin>
-        </plugins>
-    </build>
-      <repositories>
-        <repository>
-            <id>central</id>
-            <name>Central Repository</name>
-            <url>https://repo.maven.apache.org/maven2</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-        </repository>
-    </repositories>
- 
-    <pluginRepositories>
-        <pluginRepository>
-            <id>central</id>
-            <name>Central Repository</name>
-            <url>https://repo.maven.apache.org/maven2</url>
-            <layout>default</layout>
-            <snapshots>
-                <enabled>false</enabled>
-            </snapshots>
-            <releases>
-                <updatePolicy>never</updatePolicy>
-            </releases>
-        </pluginRepository>
+  <build>
+                
+    
+    <plugins>
+                        
+      
+      <plugin>
+                                
+        
+        <groupId>org.springframework.boot</groupId>
+                                
+        
+        <artifactId>spring-boot-maven-plugin</artifactId>
+                                
+        
+        <version>2.4.4</version>
+                            
+      
+      </plugin>
+                    
+    
+    </plugins>
+            
+  
+  </build>
+          
+  
+  <repositories>
+                
+    
+    <repository>
+                        
+      
+      <id>central</id>
+                        
+      
+      <name>Central Repository</name>
+                        
+      
+      <url>https://repo.maven.apache.org/maven2</url>
+                        
+      
+      <layout>default</layout>
+                        
+      
+      <snapshots>
+                                
+        
+        <enabled>false</enabled>
+                            
+      
+      </snapshots>
+                    
+    
+    </repository>
+            
+  
+  </repositories>
+     
+    
+  
+  <pluginRepositories>
+                
+    
+    <pluginRepository>
+                        
+      
+      <id>central</id>
+                        
+      
+      <name>Central Repository</name>
+                        
+      
+      <url>https://repo.maven.apache.org/maven2</url>
+                        
+      
+      <layout>default</layout>
+                        
+      
+      <snapshots>
+                                
+        
+        <enabled>false</enabled>
+                            
+      
+      </snapshots>
+                        
+      
+      <releases>
+                                
+        
+        <updatePolicy>never</updatePolicy>
+                            
+      
+      </releases>
+                    
+    
+    </pluginRepository>
+            
+  
+  </pluginRepositories>
+      
+  
 
-    </pluginRepositories>
 
-  
-  
 </project>
