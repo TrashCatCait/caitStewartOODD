@@ -1,4 +1,4 @@
-package com.solent.cait.oodd;
+package com.solent.cait.oodd.service;
 
 /**
  * Hello world!

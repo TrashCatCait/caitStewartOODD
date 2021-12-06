@@ -1,4 +1,4 @@
-package com.solent.cait.oodd.security;
+package com.solent.cait.oodd.dao;
 
 /**
  * Hello world!

@@ -1,4 +1,4 @@
-package com.solent.cait.oodd.service;
+package com.solent.cait.oodd.web;
 
 /*
  * @Author Cait
@@ -10,7 +10,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 
-@SpringBootApplication(scanBasePackages = "com.solent.cait.oodd")
+@SpringBootApplication(scanBasePackages = "com.solent.cait.oodd.web")
 public class SpringBootMain extends SpringBootServletInitializer {
     @Override
     protected SpringApplicationBuilder configure(SpringApplicationBuilder builder) {
