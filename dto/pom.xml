@@ -33,6 +33,11 @@
       <version>4.11</version>
       <scope>test</scope>
     </dependency>
+    <dependency>
+        <groupId>com.solent.cait.oodd.security</groupId>
+        <artifactId>security</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </dependency>
   </dependencies>
 
   <build>

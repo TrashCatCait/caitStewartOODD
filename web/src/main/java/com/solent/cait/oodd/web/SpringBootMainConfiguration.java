@@ -8,6 +8,7 @@ package com.solent.cait.oodd.web;
 
 import com.solent.cait.oodd.service.ServiceConfiguration;
 import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import com.solent.cait.oodd.service.ServiceObjectFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,7 +29,7 @@ import com.solent.cait.oodd.model.UserBasket;
 public class SpringBootMainConfiguration {
     @Bean
     ShoppingService getShoppingService() {
-        return null;
+        return ServiceObjectFactory.getShoppingService();
     }
 
     // see https://www.baeldung.com/spring-mvc-session-attributes
@@ -36,6 +37,6 @@ public class SpringBootMainConfiguration {
     @Scope(value = WebApplicationContext.SCOPE_SESSION,
             proxyMode = ScopedProxyMode.TARGET_CLASS)
     public UserBasket getNewBasket() {
-        return null;
+        return ServiceObjectFactory.getNewBasket();
     }
 }

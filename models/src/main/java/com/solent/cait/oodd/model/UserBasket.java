@@ -14,7 +14,9 @@ import java.util.List;
 public interface UserBasket {
     List<Item> getCurrentBasketItems();
     
-    Item addItemToChar(Item item);
+    void addItemToBasket(Item item);
     
-    String removeItem(String itemUUID);
+    void removeItem(String itemUUID);
+
+    double getTotal();
 }
