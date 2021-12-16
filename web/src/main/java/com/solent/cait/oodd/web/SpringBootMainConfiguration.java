@@ -7,25 +7,29 @@ package com.solent.cait.oodd.web;
 
 
 import com.solent.cait.oodd.service.ServiceConfiguration;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import com.solent.cait.oodd.service.ServiceObjectFactory;
+import com.solent.cait.oodd.model.ShoppingService;
+import com.solent.cait.oodd.model.UserBasket;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.web.context.WebApplicationContext;
-import com.solent.cait.oodd.model.ShoppingService;
-import com.solent.cait.oodd.model.UserBasket;
+
+
+
 /**
  *
  * @author caitlyn
  */
 
 @Configuration
-@PropertySource("classpath:persistence-app.properties")
 @Import(ServiceConfiguration.class)
+@PropertySource("classpath:persistence-app.properties")
 public class SpringBootMainConfiguration {
     @Bean
     ShoppingService getShoppingService() {
@@ -39,4 +43,5 @@ public class SpringBootMainConfiguration {
     public UserBasket getNewBasket() {
         return ServiceObjectFactory.getNewBasket();
     }
+
 }

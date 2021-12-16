@@ -16,7 +16,7 @@ import com.solent.cait.oodd.dao.JPAPersistenceConfig;
  */
 @Configuration
 
-@ComponentScan(basePackages = {"com.solent.cait.oodd.spring",
+@ComponentScan(basePackages = {
     "com.solent.cait.oodd.service"
 })
 @Import({JPAPersistenceConfig.class})

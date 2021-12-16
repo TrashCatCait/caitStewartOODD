@@ -6,8 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 
-<%@taglib prefix="f" uri="http://java.sun.com/jsf/core"%>
-<%@taglib prefix="h" uri="http://java.sun.com/jsf/html"%>
+<%@taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
 <!DOCTYPE html>
 
@@ -29,7 +28,12 @@
             <nav class="navbar">
                 <div>
                     <ul class="nav-list"> 
-                        <li class="list-item"><a href="./home"> Home</a></li>
+                        <li class="list-item"><a href="./home">Home</a></li>
+                        <li class="list-item"><a href="./about">About</a></li> 
+                        <li class="list-item"><a href="./contact">Contact</a></li>
+                        <li class="list-item"><a href="./login">Login</a></li> 
+                        <li class="list-item"><a href="./logout">Logout</a></li>
+                        <li class="list-item">User: ${currentUser}</li>
                     </ul>
                 </div>
             </nav>

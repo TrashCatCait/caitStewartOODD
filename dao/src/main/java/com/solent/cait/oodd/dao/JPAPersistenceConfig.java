@@ -29,7 +29,7 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
  */
 @Configuration
 @EnableTransactionManagement
-@EnableJpaRepositories(basePackages = "org.solent.com504.oodd.cart.dao.impl")
+@EnableJpaRepositories(basePackages = "com.solent.cait.oodd.dao")
 // @PropertySource("classpath:persistence-test.properties") // set in calling configuration
 public class JPAPersistenceConfig {
 
@@ -41,7 +41,7 @@ public class JPAPersistenceConfig {
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
         final LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
         em.setDataSource(dataSource());
-        em.setPackagesToScan("org.solent.com504.oodd.cart.model.dto" );
+        em.setPackagesToScan("com.solent.cait.oodd.dto" );
 
         final JpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
         em.setJpaVendorAdapter(vendorAdapter);

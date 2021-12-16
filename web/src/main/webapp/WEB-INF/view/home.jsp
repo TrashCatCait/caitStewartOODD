@@ -7,15 +7,18 @@
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c" %>
 
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
-    "http://www.w3.org/TR/html4/loose.dtd">
+<jsp:include page="header.jsp" />
+<main role="main" class="container">
 
-    <html>
-        <head>
-            <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
-            <title>Home OODD CS</title>
-        </head>
         <body>
-            <h1><h:outputText value="Hello World!"/>Hello World</h1>
+            <h1>Hello World</h1>
+            <div style="color:red;">${errorMessage}</div>
+            <div style="color:green;">${message}</div>
+            <c:forEach var="item" items="${availableItems}">
+            <h4>${item.name}</h4>
+            </c:forEach>
         </body>
-    </html>
+
+    
+</main>
+<jsp:include page="footer.jsp" />

@@ -12,7 +12,7 @@ import java.util.List;
  * @author caitlyn
  */
 public interface ShoppingService {
-    List<Item> getCurrentBasketItems();  
+    List<Item> getAviliableItems();  
     UserBasket purchaseItems(UserBasket basket);
     
     Item getItemByName(String name);

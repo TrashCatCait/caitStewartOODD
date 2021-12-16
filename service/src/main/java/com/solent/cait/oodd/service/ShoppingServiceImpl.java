@@ -44,7 +44,7 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
 
     @Override
-    public List<Item> getCurrentBasketItems() {
+    public List<Item> getAviliableItems() {
         return itemlist;
     }
 
