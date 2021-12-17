@@ -5,6 +5,7 @@
 package com.solent.cait.oodd.model;
 
 import com.solent.cait.oodd.dto.Item;
+import com.solent.cait.oodd.dto.Invoice;
 import java.util.List;
 
 /**
@@ -13,7 +14,10 @@ import java.util.List;
  */
 public interface ShoppingService {
     List<Item> getAviliableItems();  
-    UserBasket purchaseItems(UserBasket basket);
+    
+    void addItem(Item item);
+    
+    Invoice purchaseItems(UserBasket basket);
     
     Item getItemByName(String name);
     

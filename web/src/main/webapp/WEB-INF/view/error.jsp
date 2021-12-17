@@ -11,6 +11,7 @@
 <main role="main" class="container">
 
         <body>
+            <h1>Error:</h1>
             <h1>${error} ${status}</h1>
         </body>
 

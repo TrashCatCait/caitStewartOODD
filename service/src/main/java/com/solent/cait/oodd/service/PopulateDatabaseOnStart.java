@@ -28,7 +28,7 @@ public class PopulateDatabaseOnStart {
 
     @Autowired
     private UserRepository userRepository;
-
+    
     @PostConstruct
     public void initDatabase() {
 

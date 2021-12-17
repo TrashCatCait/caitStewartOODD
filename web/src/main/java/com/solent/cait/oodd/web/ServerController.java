@@ -137,6 +137,7 @@ public class ServerController {
     @ExceptionHandler(Exception.class)
     public String myExceptionHandler(final Exception e, Model model, HttpServletRequest request) {
         //logger.error(strStackTrace); // send to logger first
+        model.addAttribute("error", e.getMessage());
         return "error"; // default friendly exception message for sessionUser
     }
 

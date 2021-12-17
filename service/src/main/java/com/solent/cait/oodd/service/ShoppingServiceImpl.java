@@ -12,6 +12,9 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import com.solent.cait.oodd.model.ShoppingService;
 import com.solent.cait.oodd.dto.Item;
+import com.solent.cait.oodd.dao.ItemCatalogRepository;
+import com.solent.cait.oodd.dao.InvoiceRepository;
+import com.solent.cait.oodd.dto.Invoice;
 import com.solent.cait.oodd.model.UserBasket;
 
 /**
@@ -30,7 +33,11 @@ public class ShoppingServiceImpl implements ShoppingService {
             new Item("pet alligator", 65.00)
     );
     
-    public UserBasket purchaseItems(UserBasket basket) {
+    public void addItem(Item item) {
+       
+    }
+    
+    public Invoice purchaseItems(UserBasket basket) {
         return null;
         
     }
