@@ -17,7 +17,6 @@ import javax.persistence.Id;
 @Entity
 public class Item {
     private String name = null;
-    private String UUID = null;
     private Integer count = 0;
     private Double itemPrice = 0.0;
     private Long id = (long) 0;
@@ -40,14 +39,6 @@ public class Item {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getUuid() {
-        return UUID;
-    }
-
-    public void setUuid(String UUID) {
-        this.UUID = UUID;
     }
 
     public String getName() {
@@ -84,7 +75,7 @@ public class Item {
 
     @Override
     public String toString() {
-        return "ShoppingItem{" + "uuuid=" + UUID + ", name=" + name + ", quantity=" + count + ", price=" + itemPrice + '}';
+        return "ShoppingItem{" + ", name=" + name + ", quantity=" + count + ", price=" + itemPrice + '}';
     }
     
     

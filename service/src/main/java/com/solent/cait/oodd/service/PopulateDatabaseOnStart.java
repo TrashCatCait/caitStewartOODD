@@ -9,7 +9,10 @@ import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import com.solent.cait.oodd.dao.UserRepository;
+import com.solent.cait.oodd.dao.ItemCatalogRepository;
+import com.solent.cait.oodd.dao.InvoiceRepository;
 import com.solent.cait.oodd.dto.User;
+import com.solent.cait.oodd.dto.Item;
 import com.solent.cait.oodd.dto.Roles;
 
 /**
@@ -25,6 +28,12 @@ public class PopulateDatabaseOnStart {
 
     private static final String DEFAULT_USER_PASSWORD = "user1234";
     private static final String DEFAULT_USER_USERNAME = "user1234";
+
+    @Autowired
+    private InvoiceRepository invoiceRepo;
+    
+    @Autowired
+    private ItemCatalogRepository itemRepo;
 
     @Autowired
     private UserRepository userRepository;
@@ -57,5 +66,11 @@ public class PopulateDatabaseOnStart {
         } else {
         }
 
+        Item defaultItem = new Item();
+        defaultItem.setName("Hen");
+        defaultItem.setPrice(400.00);
+        defaultItem.setQuantity(19);
+        
+        itemRepo.save(defaultItem);
     }
 }

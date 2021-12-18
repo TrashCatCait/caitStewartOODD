@@ -46,7 +46,6 @@ public class UserBasketImpl implements UserBasket {
         }
         if (!itemExists){
             item.setQuantity(1);
-            itemMap.put(item.getUuid(), item);
         }
     }
 

@@ -15,7 +15,12 @@ import com.solent.cait.oodd.dto.Item;
 import com.solent.cait.oodd.dao.ItemCatalogRepository;
 import com.solent.cait.oodd.dao.InvoiceRepository;
 import com.solent.cait.oodd.dto.Invoice;
+import com.solent.cait.oodd.dto.User;
 import com.solent.cait.oodd.model.UserBasket;
+import java.time.LocalDate;
+import java.util.Date;
+import org.springframework.beans.factory.annotation.Autowired;
+
 
 /**
  *
@@ -24,54 +29,45 @@ import com.solent.cait.oodd.model.UserBasket;
 
 public class ShoppingServiceImpl implements ShoppingService {
 
-    // note ConcurrentHashMap instead of HashMap if map can be altered while being read
-    private Map<String, Item> itemMap = new ConcurrentHashMap<String, Item>();
+    
+    @Autowired
+    private InvoiceRepository invoiceRepo;
+    
+    @Autowired
+    private ItemCatalogRepository itemRepo;
 
-    private List<Item> itemlist = Arrays.asList(new Item("house", 20000.00),
-            new Item("hen", 5.00),
-            new Item("car", 5000.00),
-            new Item("pet alligator", 65.00)
-    );
-    
-    public void addItem(Item item) {
-       
-    }
-    
-    public Invoice purchaseItems(UserBasket basket) {
-        return null;
+    @Override
+    public void purchaseItems(UserBasket basket, User user) {
+        Invoice newInvoice = new Invoice();
+        newInvoice.setPurchasedItems(basket.getCurrentBasketItems());
+        newInvoice.setAmountDue(basket.getTotal());
+        newInvoice.setPurchaser(user);
         
+        newInvoice.setDateOfPurchase(new Date());
     }
     
-    public ShoppingServiceImpl() {
+    @Override
+    public void removeItemById(Long Id) {
+        itemRepo.deleteById(Id); 
+    }
+    
+    @Override
+    public Boolean ItemExistsId(Long id) {
+        return itemRepo.existsById(id);
+    }
+    
+    @Override
+    public void addItem(Item item) {
+        itemRepo.save(item);
+    }
 
-        // initialised the hashmap
-        for (Item item : itemlist) {
-            itemMap.put(item.getName(), item);
-        }
+    public ShoppingServiceImpl() {
+     
     }
 
     @Override
     public List<Item> getAviliableItems() {
-        return itemlist;
-    }
-
-    @Override
-    public Item getItemByName(String name) {
-        Item templateItem = itemMap.get(name);
-        
-        if(templateItem==null) return null;
-        
-        Item item = new Item();
-        item.setName(name);
-        item.setPrice(templateItem.getPrice());
-        item.setQuantity(0);
-        item.setUuid(UUID.randomUUID().toString());
-        return item;
-    }
-    
-    @Override
-    public Item getItemByUUID(String UUID) {
-        return null;
+        return itemRepo.findAll();
     }
 
 }

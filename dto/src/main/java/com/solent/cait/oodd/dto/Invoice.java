@@ -24,8 +24,6 @@ public class Invoice {
 
     private Long id;
 
-    private String invoiceNumber;
-
     private Date dateOfPurchase;
 
     private Double amountDue;
@@ -42,14 +40,6 @@ public class Invoice {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public String getInvoiceNumber() {
-        return invoiceNumber;
-    }
-
-    public void setInvoiceNumber(String invoiceNumber) {
-        this.invoiceNumber = invoiceNumber;
     }
 
     public Date getDateOfPurchase() {

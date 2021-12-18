@@ -74,22 +74,6 @@ public class ServerController {
         String message = "";
         String errorMessage = "";
         
-        if (action == null) {
-            // do nothing but show page
-        } else if ("addItemToCart".equals(action)) {
-            Item item = shoppingService.getItemByName(itemName);
-            if (item == null) {
-                message = "cannot add unknown " + itemName + " to cart";
-            } else {
-                message = "adding " + itemName + " to cart price= " + item.getPrice();
-                userBasket.addItemToBasket(item);
-            }
-        } else if ("removeItemFromCart".equals(action)) {
-            message = "removed " + itemName + " from cart";
-            userBasket.removeItem(itemUuid);
-        } else {
-            message = "unknown action=" + action;
-        }
 
         List<Item> availableItems = shoppingService.getAviliableItems();
 
@@ -119,6 +103,89 @@ public class ServerController {
         model.addAttribute("selectedPage", "about");
         return "about";
     }
+    
+    @RequestMapping(value = "/addItem", method = RequestMethod.GET)
+    public String AddNewItem(Model model, HttpSession session) {
+        User sessionUser = getSessionUser(session);
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        
+        // used to set tab selected
+        model.addAttribute("selectedPage", "additem");
+        if(sessionUser.getUserRole().equals(Roles.ADMIN)) {
+            return "additem";
+        } else {
+            model.addAttribute("errorMessage", "You must be an admin to add items");
+            return "home";
+        }
+    }
+
+    @RequestMapping(value = "/addItem", method = RequestMethod.POST) 
+    public String AddNewItem(@RequestParam(value = "action", required=false) String action,
+            @RequestParam(value = "itemName", required=false) String itemName,
+            @RequestParam(value = "itemQuantity", required=false) Integer itemQuantity, 
+            @RequestParam(value = "itemPrice", required=false) Double itemPrice,
+            Model model, HttpSession session) {
+        
+        User sessionUser = getSessionUser(session);
+
+        if(sessionUser.getUserRole().equals(Roles.ADMIN) && action.equals("addNewItem")) {
+            Item item = new Item();
+            item.setName(itemName);
+            item.setQuantity(itemQuantity);
+            item.setPrice(itemPrice);
+            shoppingService.addItem(item);
+            model.addAttribute("message", "Item " + itemName + " added to the database");
+        } else {
+            model.addAttribute("errorMessage", "Unable to add item please make sure you a admin user");
+            return "home";
+        } 
+
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        
+        // used to set tab selected
+        model.addAttribute("selectedPage", "about");
+        return "additem";
+    }
+    
+    @RequestMapping(value = "/delItem", method = RequestMethod.GET)
+    public String DeleteItem(Model model, HttpSession session) {
+        User sessionUser = getSessionUser(session);
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        
+        if(sessionUser.getUserRole().equals(Roles.ADMIN)) {
+            model.addAttribute("items", shoppingService.getAviliableItems());
+            return "delitem";
+        } else {
+            model.addAttribute("errorMessage", "You must be an admin to delete items");
+            return "home";
+        }
+    }
+
+    @RequestMapping(value = "/delItem", method = RequestMethod.POST)
+    public String DeleteItem(@RequestParam(value = "itemId", required=true) Long itemId,
+            @RequestParam(value = "action", required=false) String action,
+            Model model, HttpSession session) {
+        User sessionUser = getSessionUser(session);
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("currentUser", sessionUser.getUsername());        
+
+        if(sessionUser.getUserRole().equals(Roles.ADMIN) && action.equals("deleteItem")) {
+            if(shoppingService.ItemExistsId(itemId)) {
+                model.addAttribute("message", "Item Deleted");
+                shoppingService.removeItemById(itemId);
+            } else {
+                model.addAttribute("errorMessage", "Item does not exist can't delete item that doesn't exist");
+            }
+
+            return "delitem";
+        } else {
+            model.addAttribute("errorMessage", "Unable to remove item please make sure you a admin user and the action is set to deleteItem");
+            return "home";
+        } 
+    }
 
     @RequestMapping(value = "/contact", method = {RequestMethod.GET, RequestMethod.POST})
     public String contactCart(Model model, HttpSession session) {
@@ -127,7 +194,11 @@ public class ServerController {
         User sessionUser = getSessionUser(session);
         model.addAttribute("sessionUser", sessionUser);        
         model.addAttribute("currentUser", sessionUser.getUsername());
-
+        Item item = new Item();
+        item.setName("Pupper");
+        item.setPrice(40.00);
+        item.setQuantity(40);
+        shoppingService.addItem(item);
         
         // used to set tab selected
         model.addAttribute("selectedPage", "contact");
@@ -137,7 +208,7 @@ public class ServerController {
     @ExceptionHandler(Exception.class)
     public String myExceptionHandler(final Exception e, Model model, HttpServletRequest request) {
         //logger.error(strStackTrace); // send to logger first
-        model.addAttribute("error", e.getMessage());
+        model.addAttribute("error", e);
         return "error"; // default friendly exception message for sessionUser
     }
 

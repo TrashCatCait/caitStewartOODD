@@ -5,7 +5,7 @@
 package com.solent.cait.oodd.model;
 
 import com.solent.cait.oodd.dto.Item;
-import com.solent.cait.oodd.dto.Invoice;
+import com.solent.cait.oodd.dto.User;
 import java.util.List;
 
 /**
@@ -17,9 +17,10 @@ public interface ShoppingService {
     
     void addItem(Item item);
     
-    Invoice purchaseItems(UserBasket basket);
-    
-    Item getItemByName(String name);
-    
-    Item getItemByUUID(String UUID);
+    void purchaseItems(UserBasket basket, User user); 
+   
+    void removeItemById(Long Id);
+
+    Boolean ItemExistsId(Long id);
+
 }
