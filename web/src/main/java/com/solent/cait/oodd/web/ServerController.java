@@ -62,8 +62,7 @@ public class ServerController {
 
     @RequestMapping(value = "/home", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvhome(@RequestParam(name = "action", required = false) String action,
-            @RequestParam(name = "itemName", required = false) String itemName,
-            @RequestParam(name = "itemUUID", required = false) String itemUuid,
+            @RequestParam(name = "itemId", required = false) Long itemId,
             Model model,
             HttpSession session) {
 
@@ -80,11 +79,27 @@ public class ServerController {
         List<Item> baksetItems = userBasket.getCurrentBasketItems();
 
         Double totalPrice = userBasket.getTotal();
+        
+        if(action != null) {
+            if(action.equals("addToCart")) {
+                Item item = shoppingService.ItemAddedToBasket(itemId);
+                if(item != null) {
+                    userBasket.addItemToBasket(item);
+                    message = "Item added to basket";
+                } else {
+                    errorMessage = "Unknow Item Error";
+                }
+            } else if(action.equals("removeItem")) { 
+                
+            } else if (action.equals("checkout")) {
+
+            }
+        }
 
         // populate model with values
         model.addAttribute("availableItems", availableItems);
-        model.addAttribute("shoppingCartItems", baksetItems);
-        model.addAttribute("shoppingcartTotal", totalPrice);
+        model.addAttribute("basketItems", baksetItems);
+        model.addAttribute("basketTotal", totalPrice);
         model.addAttribute("message", message);
         model.addAttribute("errorMessage", errorMessage);
 
@@ -185,6 +200,27 @@ public class ServerController {
             model.addAttribute("errorMessage", "Unable to remove item please make sure you a admin user and the action is set to deleteItem");
             return "home";
         } 
+    }
+
+
+    @RequestMapping(value = "/checkout", method = {RequestMethod.POST}) 
+    public String checkoutBasket(Model model, HttpSession session) {
+        User userSession = getSessionUser(session);
+
+        if(userBasket.getCurrentBasketItems().isEmpty()) {
+            model.addAttribute("errorMessage", "Error Basket is empty please actually add items to your basket");
+            return "home";
+        } else if (userSession.getUserRole().equals(Roles.ANONYMOUS)) {
+            model.addAttribute("errorMessage", "Please log into an account to make a purchase");
+            return "home";
+        } else {
+            shoppingService.purchaseItems(userBasket, userSession);
+            List<Item> itemList = shoppingService.getAviliableItems();
+            for(int i = 0; i < itemList.size(); i++) {
+                userBasket.removeItem(itemList.get(i).getId());
+            }
+            return "home";
+        }
     }
 
     @RequestMapping(value = "/contact", method = {RequestMethod.GET, RequestMethod.POST})

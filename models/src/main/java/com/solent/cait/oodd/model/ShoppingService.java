@@ -23,4 +23,7 @@ public interface ShoppingService {
 
     Boolean ItemExistsId(Long id);
 
+    Item ItemAddedToBasket(Long id);
+    void ItemRemovedToBasket(Long id); 
+
 }

@@ -19,6 +19,7 @@ import com.solent.cait.oodd.dto.User;
 import com.solent.cait.oodd.model.UserBasket;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
 
@@ -44,6 +45,8 @@ public class ShoppingServiceImpl implements ShoppingService {
         newInvoice.setPurchaser(user);
         
         newInvoice.setDateOfPurchase(new Date());
+        
+        invoiceRepo.save(newInvoice);
     }
     
     @Override
@@ -54,6 +57,26 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Override
     public Boolean ItemExistsId(Long id) {
         return itemRepo.existsById(id);
+    }
+
+    @Override
+    public Item ItemAddedToBasket(Long id) {
+        Optional<Item> item = itemRepo.findById(id);
+        if(item.isPresent()){
+            item.get().setQuantity(item.get().getQuantity() - 1);
+            itemRepo.save(item.get());
+            return item.get();
+        }
+        return null;
+    }
+    
+    @Override
+    public void ItemRemovedToBasket(Long id) {
+        Optional<Item> item = itemRepo.findById(id);
+        if(item.isPresent()){
+            item.get().setQuantity(item.get().getQuantity() + 1);
+            itemRepo.save(item.get());
+        }
     }
     
     @Override
@@ -71,3 +94,4 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
 
 }
+
