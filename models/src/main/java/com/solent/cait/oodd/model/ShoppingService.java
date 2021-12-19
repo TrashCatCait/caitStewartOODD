@@ -13,17 +13,20 @@ import java.util.List;
  * @author caitlyn
  */
 public interface ShoppingService {
-    List<Item> getAviliableItems();  
-    
+
+    List<Item> getAviliableItems();
+
     void addItem(Item item);
-    
-    Boolean purchaseItems(List<Item> items, Double total, User user); 
-   
+
+    Boolean purchaseItems(List<Item> items, Double total, User user);
+
     void removeItemById(Long Id);
 
     Boolean ItemExistsId(Long id);
 
     Item ItemAddedToBasket(Long id);
-    void ItemRemovedToBasket(Long id); 
 
+    void ItemRemovedToBasket(Long id);
+
+    List<Item> getItemsByString(String searchStr);
 }

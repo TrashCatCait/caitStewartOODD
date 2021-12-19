@@ -16,9 +16,10 @@
         <div style="color:green;">${message}</div>
         <form action="./addItem" method="POST">
             <input type="hidden" name="action" value="addNewItem">
-	    <p>Item Name: <input type="text" name="itemName" ></input></p>
-            <p>Item Quantity: <input type="number" name="itemQuantity" ></input></p>
-            <p>Item Price: <input type="number" name="itemPrice" step="0.01" ></input></p>
+	    <p>Item Name: <input type="text" name="itemName"/></p>
+            <p>Item Quantity: <input type="number" name="itemQuantity"/></p>
+            <p>Item Price: <input type="number" name="itemPrice" step="0.01"/></p>
+            <p>Item Tag: <input type="text" name="itemType"/></p>
             <p><button type="submit" >Update Catalog</button></p>
         </form> 
     </body>

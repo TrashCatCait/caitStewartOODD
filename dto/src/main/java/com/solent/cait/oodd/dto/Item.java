@@ -21,7 +21,7 @@ public class Item {
     private Integer count = 0;
     private Double itemPrice = 0.0;
     private Long id = (long) 0;
-    private String[] tags = null;
+    private String type = null;
     
     public Item(){
         
@@ -75,18 +75,16 @@ public class Item {
         this.itemPrice = itemPrice;
     }
     
-    public String[] getTags() {
-        return tags;
+    public String getType() {
+        return type;
     }
     
-    public void setTags(String[] tags) {
-        this.tags = tags;
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override
     public String toString() {
         return "ShoppingItem{" + ", name=" + name + ", quantity=" + count + ", price=" + itemPrice + '}';
     }
-    
-    
 }

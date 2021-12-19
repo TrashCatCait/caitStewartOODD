@@ -73,6 +73,7 @@ public class PopulateDatabaseOnStart {
         defaultItem.setPrice(400.00);
         defaultItem.setQuantity(19);
         defaultItem.setUuid(UUID.randomUUID().toString());
+        defaultItem.setType("Animal");
         itemRepo.save(defaultItem);
     }
 }

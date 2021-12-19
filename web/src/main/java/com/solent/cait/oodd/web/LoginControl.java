@@ -8,6 +8,8 @@ import com.solent.cait.oodd.dto.Roles;
 import com.solent.cait.oodd.dao.UserRepository;
 import java.util.List;
 import javax.transaction.Transactional;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @RequestMapping("/")
 public class LoginControl {
+    final static Logger LOG = LogManager.getLogger(ServerController.class);
 
     @Autowired
     UserRepository userRepository;
@@ -279,7 +282,7 @@ public class LoginControl {
                 }
                 userRepository.save(modifyUser);
                 model.addAttribute("message", "User account updated");
-                return "modifyUser";
+                return "home";
             } catch (Exception ex) {
                 model.addAttribute("errorMessage", "Error parsing user roles");
                 return "home";
@@ -312,8 +315,8 @@ public class LoginControl {
     @ExceptionHandler(Exception.class)
     public String myExceptionHandler(final Exception e, Model model, HttpServletRequest request) {
         //logger.error(strStackTrace); // send to logger first
-        model.addAttribute("error", e.getMessage());
-
+        model.addAttribute("error", e);
+        LOG.warn(e);
         return "error"; // default friendly exception message for sessionUser
     }
 

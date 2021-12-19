@@ -16,28 +16,30 @@
     <div style="color:red;">${errorMessage}</div>
     <div style="color:green;">${message}</div><!--  -->
 
-    <h3>${orderDetails.invoiceNumber}</h3>
+    <h3>Order Number: ${orderDetails.invoiceNumber}</h3>
+    <h4>Bought by: ${orderDetails.username}</h4>
     <ul>
         <c:forEach var="item" items="${orderDetails.getPurchasedItems()}">
-            <li><p>Item Name: ${item.name} Price: ${item.price} Amount Bought: ${item.quantity} (Order quantity currently seems to be bugged) Order Status: ${orderDetails.status}</p></li>
+            <li>Item Name: ${item.name}</li>
+            <li>Price: ${item.price}</li> 
+            <li>Amount Bought: ${item.quantity} (Order quantity currently seems to be bugged)</li>
             </c:forEach>
+        <h5>Order Status: ${orderDetails.status}</h5>
+
     </ul>
     <c:if test="${sessionUser.userRole =='ADMIN'}">
         <h4>User Roles & Account Status</h4>
         <form action="./modifyOrder" method="POST">
             <input type="hidden" name="action" value="manageOrder"/>
-
-            <p> 
-                <input type="hidden" name="orderId" value="${orderDetails.id}"/>
-                <h3> Order Status </h3>
-                <select name="orderStatus" >
-                    <c:forEach var="status" items="${InvoiceStatus.values()}">
-                        <option value="${status}" <c:if test="${orderDetails.status == status}"> selected  </c:if>>${status}</option>
-                    </c:forEach>
-                </select>
-            </p>
-                <button type="submit">Update Order</button>
-            </form>
+            <input type="hidden" name="orderId" value="${orderDetails.id}"/>
+            <h3> Order Status </h3>
+            <select name="orderStatus" >
+                <c:forEach var="status" items="${InvoiceStatus.values()}">
+                    <option value="${status}" <c:if test="${orderDetails.status == status}"> selected  </c:if>>${status}</option>
+                </c:forEach>
+            </select>
+            <button type="submit">Update Order</button>
+        </form>
     </c:if>
 </main>
 

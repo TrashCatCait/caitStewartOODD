@@ -14,6 +14,13 @@
             <h1>Items</h1>
             <div style="color:red;">${errorMessage}</div>
             <div style="color:green;">${message}</div>
+            
+            <form action="./home" method="POST">
+                <input type="hidden" name="action" value="search"/>
+                <input type="text" name="searchTxt"/>
+                <button type="submit">Search</button>
+            </form>
+            
             <c:forEach var="item" items="${availableItems}">
             <h4>Name: ${item.name}</h4>
             <h4>Price: ${item.price}</h4>

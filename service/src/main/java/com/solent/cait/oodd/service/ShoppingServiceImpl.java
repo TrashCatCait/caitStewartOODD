@@ -19,8 +19,11 @@ import com.solent.cait.oodd.dto.InvoiceStatus;
 import com.solent.cait.oodd.dto.User;
 import com.solent.cait.oodd.model.UserBasket;
 import java.time.LocalDate;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.springframework.beans.factory.annotation.Autowired;
 
 /**
@@ -39,7 +42,8 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Override
     public Boolean purchaseItems(List<Item> items, Double total, User user) {
         Invoice newInvoice = new Invoice();
-
+        //I don't know why the items are display the wrong quantity on order screen because they work out the basket
+        //Quantity okay it's very weird.
         newInvoice.setPurchasedItems(items);
         newInvoice.setAmountDue(total);
         newInvoice.setPurchaser(user);
@@ -47,7 +51,6 @@ public class ShoppingServiceImpl implements ShoppingService {
         newInvoice.setDateOfPurchase(new Date());
         newInvoice.setStatus(InvoiceStatus.OUTSTANDING);
         newInvoice.setUsername(user.getUsername());
-
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);
             //Get the database version of this item 
@@ -65,8 +68,8 @@ public class ShoppingServiceImpl implements ShoppingService {
                 itemRepo.save(repoItem.get());
             }
         }
-
         invoiceRepo.save(newInvoice);
+        
         return true;
     }
 
@@ -80,6 +83,18 @@ public void removeItemById(Long Id) {
     @Override
 public Boolean ItemExistsId(Long id) {
         return itemRepo.existsById(id);
+    }
+
+/*
+    Returns all the items either named String or with type of string
+*/
+    @Override
+    public List<Item> getItemsByString(String searchStr) {
+        List<Item> typeSearchItems = itemRepo.FindByType(searchStr);
+        List<Item> nameSearchItems = itemRepo.FindByName(searchStr);
+        
+        List<Item> newList = Stream.of(typeSearchItems, nameSearchItems).flatMap(Collection::stream).collect(Collectors.toList());
+        return newList;
     }
 
     @Override

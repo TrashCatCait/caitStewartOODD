@@ -9,7 +9,7 @@
     <div style="color:green;">${message}</div>
     <ul>
     <c:forEach var="order" items="${orders}">
-            <li><p>${order}</p><form method="GET" action="./viewOrder"><input type="hidden" name="order" value="${order.id}"/><button type="submit">Select User</button></form></li>
+            <li><p>${order.invoiceNumber} Bought by: ${order.purchaser.username}</p><form method="GET" action="./viewOrder"><input type="hidden" name="order" value="${order.id}"/><button type="submit">Select Order</button></form></li>
     </c:forEach>
     </ul>
 </main>

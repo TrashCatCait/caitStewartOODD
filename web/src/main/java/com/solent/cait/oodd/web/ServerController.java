@@ -79,13 +79,13 @@ public class ServerController {
             Model model,
             HttpSession session) {
         Long itemId;
-        if(itemIdStr != null) {
-        try {
-            itemId = Long.parseLong(itemIdStr);
-        } catch (Exception ex) {
-            model.addAttribute("errorMessage", "Unable to parse ID");
-            return "home";
-        }
+        if (itemIdStr != null) {
+            try {
+                itemId = Long.parseLong(itemIdStr);
+            } catch (Exception ex) {
+                model.addAttribute("errorMessage", "Unable to parse ID");
+                return "home";
+            }
         }
 
         User sessionUser = getSessionUser(session);
@@ -225,7 +225,7 @@ public class ServerController {
             model.addAttribute("currentUser", sessionUser.getUsername());
             model.addAttribute("sessionUser", sessionUser);
 
-            List<Invoice> invoices = invoiceRepo.FindByUser(sessionUser.getUsername());
+            List<Invoice> invoices = invoiceRepo.FindByUsername(sessionUser.getUsername());
             model.addAttribute("orders", invoices);
             if (!username.equals(sessionUser.getUsername()) && !sessionUser.getUserRole().equals(Roles.ADMIN)) {
                 model.addAttribute("errorMessage", "Error only the owner of " + username + " Account can view their orders, The current account is " + sessionUser.getUsername());
@@ -242,8 +242,9 @@ public class ServerController {
 
     @RequestMapping(value = "/home", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvhome(@RequestParam(name = "action", required = false) String action,
-            @RequestParam(name = "itemId", required = false) Long itemId,
+            @RequestParam(name = "itemId", required = false) String itemIdStr,
             @RequestParam(name = "itemUUID", required = false) String uuid,
+            @RequestParam(name = "searchTxt", required = false) String searchTxt,
             Model model,
             HttpSession session) {
 
@@ -253,26 +254,43 @@ public class ServerController {
         model.addAttribute("sessionUser", sessionUser);
         String message = "";
         String errorMessage = "";
+        Long itemId = null;
 
-        if (action != null) {
-            if (action.equals("addToCart")) {
-                Item item = shoppingService.ItemAddedToBasket(itemId);
-                Item newitem = new Item();
-                newitem.setId(item.getId());
-                newitem.setName(item.getName());
-                newitem.setUuid(item.getUuid());
-                newitem.setPrice(item.getPrice());
-                newitem.setQuantity(1);
-                if (newitem != null) {
-                    userBasket.addItemToBasket(newitem);
-                    message = "Item added to basket";
-                } else {
-                    errorMessage = "Unknow Item Error";
-                }
+        if (itemIdStr != null) {
+            try {
+                itemId = Long.parseLong(itemIdStr);
+            } catch (Exception ex) {
+                model.addAttribute("errorMessage", "Unable to parse item ID");
+                return "home";
             }
         }
 
         List<Item> availableItems = shoppingService.getAviliableItems();
+
+        if (action != null) {
+
+            if (action.equals("addToCart")) {
+                if (itemId != null) {
+                    Item item = shoppingService.ItemAddedToBasket(itemId);
+                    Item newitem = new Item();
+                    newitem.setId(item.getId());
+                    newitem.setName(item.getName());
+                    newitem.setUuid(item.getUuid());
+                    newitem.setPrice(item.getPrice());
+                    newitem.setQuantity(1);
+                    if (newitem != null) {
+                        userBasket.addItemToBasket(newitem);
+                        message = "Item added to basket";
+                    } else {
+                        errorMessage = "Unknow Item Error";
+                    }
+                }
+            } else if (action.equals("search")) {
+                if (searchTxt != null) {
+                    availableItems = shoppingService.getItemsByString(searchTxt);
+                }
+            }
+        }
 
         // populate model with values
         model.addAttribute("availableItems", availableItems);
@@ -314,11 +332,25 @@ public class ServerController {
     @RequestMapping(value = "/addItem", method = RequestMethod.POST)
     public String AddNewItem(@RequestParam(value = "action", required = false) String action,
             @RequestParam(value = "itemName", required = false) String itemName,
-            @RequestParam(value = "itemQuantity", required = false) Integer itemQuantity,
-            @RequestParam(value = "itemPrice", required = false) Double itemPrice,
+            @RequestParam(value = "itemQuantity", required = false) String itemQuantityStr,
+            @RequestParam(value = "itemPrice", required = false) String itemPriceStr,
+            @RequestParam(value = "itemType", required = false) String itemType,
             Model model, HttpSession session) {
 
         User sessionUser = getSessionUser(session);
+        Integer itemQuantity;
+        Double itemPrice;
+
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("currentUser", sessionUser.getUsername());
+
+        try {
+            itemQuantity = Integer.parseInt(itemQuantityStr);
+            itemPrice = Double.parseDouble(itemPriceStr);
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Unable to Parse item price and Item Quantity");
+            return "home";
+        }
 
         if (sessionUser.getUserRole().equals(Roles.ADMIN) && action.equals("addNewItem")) {
             Item item = new Item();
@@ -326,15 +358,13 @@ public class ServerController {
             item.setQuantity(itemQuantity);
             item.setPrice(itemPrice);
             item.setUuid(UUID.randomUUID().toString());
+            item.setType(itemType);
             shoppingService.addItem(item);
             model.addAttribute("message", "Item " + itemName + " added to the database");
         } else {
             model.addAttribute("errorMessage", "Unable to add item please make sure you a admin user");
             return "home";
         }
-
-        model.addAttribute("sessionUser", sessionUser);
-        model.addAttribute("currentUser", sessionUser.getUsername());
 
         // used to set tab selected
         model.addAttribute("selectedPage", "about");

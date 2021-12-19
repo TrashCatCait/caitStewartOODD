@@ -51,16 +51,16 @@ public class Invoice {
         this.id = id;
     }
 
-    public String getInvoiceNumber() {
-        return invoiceNumber;
-    }
-    
     public String getUsername() {
         return username;
     }
     
     public void setUsername(String username) {
         this.username = username;
+    }
+    
+    public String getInvoiceNumber() {
+        return invoiceNumber;
     }
 
     public void setInvoiceNumber(String invoiceNumber) {
