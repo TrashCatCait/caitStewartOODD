@@ -12,7 +12,7 @@
 <jsp:include page="header.jsp" />
 <!-- Begin page content -->
 <main role="main" class="container">
-    <H1>Create a New Account</H1>
+    <H1>Order Details</H1>
     <div style="color:red;">${errorMessage}</div>
     <div style="color:green;">${message}</div><!--  -->
 
@@ -28,8 +28,9 @@
             <input type="hidden" name="action" value="manageOrder"/>
 
             <p> 
+                <input type="hidden" name="orderId" value="${orderDetails.id}"/>
+                <h3> Order Status </h3>
                 <select name="orderStatus" >
-                    <h3> Order Status </h3>
                     <c:forEach var="status" items="${InvoiceStatus.values()}">
                         <option value="${status}" <c:if test="${orderDetails.status == status}"> selected  </c:if>>${status}</option>
                     </c:forEach>

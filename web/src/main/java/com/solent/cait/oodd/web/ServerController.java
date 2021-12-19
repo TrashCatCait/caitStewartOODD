@@ -16,7 +16,9 @@ import com.solent.cait.oodd.dto.User;
 import com.solent.cait.oodd.dto.Roles;
 import com.solent.cait.oodd.dao.UserRepository;
 import com.solent.cait.oodd.dao.InvoiceRepository;
-import com.solent.cait.oodd.dto.Invoice; 
+import com.solent.cait.oodd.dto.Invoice;
+import com.solent.cait.oodd.dto.InvoiceStatus;
+
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -25,22 +27,20 @@ import java.util.Optional;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-
 /**
  *
  * @author caitlyn
  */
-
 @Controller
 @RequestMapping("/")
 public class ServerController {
+
     final static Logger LOG = LogManager.getLogger(ServerController.class);
 
-    
     @Autowired
     ShoppingService shoppingService = null;
-    
-    @Autowired 
+
+    @Autowired
     UserBasket userBasket = null;
 
     @Autowired
@@ -49,43 +49,53 @@ public class ServerController {
     private User getSessionUser(HttpSession session) {
         //Get http user session and cast it to user type 
         User user = (User) session.getAttribute("sessionUser");
-        if(user == null) {
+        if (user == null) {
             //If a user isn't logged om produce a blank user
             user = new User();
             user.setUsername("anonymous");
             user.setUserRole(Roles.ANONYMOUS);
-            session.setAttribute("sessionUser",user);
+            session.setAttribute("sessionUser", user);
             return user;
         } else {
             return user;
         }
     }
-    
+
     //Set up root of index
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvroot(Model model) {
         return "redirect:/index.html";
     }
-    
+
     @RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvindex(Model model) {
         return "redirect:/index.html";
     }
 
-    @RequestMapping(value = "/basket", method = {RequestMethod.GET, RequestMethod.POST}) 
-    public String Basket (@RequestParam(name = "action", required = false) String action,
-            @RequestParam(name = "itemId", required = false) Long itemId,
+    @RequestMapping(value = "/basket", method = {RequestMethod.GET, RequestMethod.POST})
+    public String Basket(@RequestParam(name = "action", required = false) String action,
+            @RequestParam(name = "itemId", required = false) String itemIdStr,
             @RequestParam(name = "itemUUID", required = false) String uuid,
             Model model,
             HttpSession session) {
-        User sessionUser = getSessionUser(session); 
+        Long itemId;
+        if(itemIdStr != null) {
+        try {
+            itemId = Long.parseLong(itemIdStr);
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Unable to parse ID");
+            return "home";
+        }
+        }
+
+        User sessionUser = getSessionUser(session);
         model.addAttribute("currentUser", sessionUser.getUsername());
         model.addAttribute("sessionUser", sessionUser);
         String message = "";
         String errorMessage = "";
-        
-        if(action != null) {
-            if(action.equals("removeItem")) {
+
+        if (action != null) {
+            if (action.equals("removeItem")) {
                 userBasket.removeItem(uuid);
             } else if (action.equals("checkout")) {
                 if (userBasket.getCurrentBasketItems().isEmpty()) {
@@ -94,7 +104,7 @@ public class ServerController {
                     errorMessage = "Sorry only customers and admins are allowed to use the shopping Service";
                 } else {
                     message = "Checking out now";
-                    if(shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser)) {
+                    if (shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser)) {
                         userBasket = WebFactory.getNewBasket();
                     } else {
                         errorMessage = "An error occured at checkout. Please Make sure the item exists";
@@ -116,18 +126,25 @@ public class ServerController {
     }
 
     @RequestMapping(value = "/viewOrder", method = {RequestMethod.GET, RequestMethod.POST})
-    public String viewOrder(@RequestParam(name = "order", required=false) Long id, 
+    public String viewOrder(@RequestParam(name = "order", required = false) String idstr,
             Model model, HttpSession session) {
         User sessionUser = getSessionUser(session);
 
         model.addAttribute("currentUser", sessionUser.getUsername());
         model.addAttribute("sessionUser", sessionUser);
+        Long id;
+        try {
+            id = Long.parseLong(idstr);
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Unable to parse ID");
+            return "home";
+        }
 
         Optional<Invoice> invoice = invoiceRepo.findById(id);
 
-        if(invoice.isPresent()) {
+        if (invoice.isPresent()) {
             //Get the user name of the purchaser if it's this account or if this account is an admin let them view the order.
-            if(invoice.get().getPurchaser().getUsername().equals(sessionUser.getUsername()) || sessionUser.getUserRole().equals(Roles.ADMIN)) {
+            if (invoice.get().getPurchaser().getUsername().equals(sessionUser.getUsername()) || sessionUser.getUserRole().equals(Roles.ADMIN)) {
                 model.addAttribute("orderDetails", invoice.get());
                 return "vieworder";
             } else {
@@ -141,21 +158,54 @@ public class ServerController {
         }
     }
 
-    @RequestMapping(value = "/modifyorder", method = {RequestMethod.GET, RequestMethod.POST})
-    public String viewOrder(@RequestParam(name = "order", required=false) Long id, 
-            @RequestParam(name = "order", required=false) Long id, 
+    @RequestMapping(value = "/modifyOrder", method = {RequestMethod.GET, RequestMethod.POST})
+    public String viewOrder(@RequestParam(name = "orderId", required = false) String idstr,
+            @RequestParam(name = "orderStatus", required = false) String status,
             Model model, HttpSession session) {
         User sessionUser = getSessionUser(session);
-    
+
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        model.addAttribute("sessionUser", sessionUser);
+        Long id;
+
+        try {
+            id = Long.parseLong(idstr);
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Unable to parse ID");
+            return "home";
+        }
+
+        try {
+            Optional<Invoice> invoice = invoiceRepo.findById(id);
+            if (invoice.isPresent()) {
+                if (invoice.get().getPurchaser().getUsername().equals(sessionUser.getUsername()) || sessionUser.getUserRole().equals(Roles.ADMIN)) {
+                    invoice.get().setStatus(InvoiceStatus.valueOf(status));
+                    model.addAttribute("orderDetails", invoice.get());
+                    invoiceRepo.save(invoice.get());
+                    return "vieworder";
+                } else {
+                    model.addAttribute("errorMessage", "Sorry you aren't allowed to view others orders if your not an admin");
+                    return "home";
+                }
+            } else {
+                model.addAttribute("errorMessage", "Error this order doesn't seem to exist");
+                return "home";
+            }
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Unable to parse status");
+            return "home";
+        }
+
     }
-    @RequestMapping(value = "/orders", method = {RequestMethod.GET, RequestMethod.POST}) 
-    public String orders(Model model, HttpSession session) { 
+
+    @RequestMapping(value = "/orders", method = {RequestMethod.GET, RequestMethod.POST})
+    public String orders(Model model, HttpSession session) {
         User sessionUser = getSessionUser(session);
 
         model.addAttribute("currentUser", sessionUser.getUsername());
         model.addAttribute("sessionUser", sessionUser);
         //Function only for admins
-        if(sessionUser.getUserRole().equals(Roles.ADMIN)) { 
+        if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
 
             List<Invoice> invoices = invoiceRepo.findAll();
             model.addAttribute("orders", invoices);
@@ -166,27 +216,26 @@ public class ServerController {
         }
     }
 
-
-    @RequestMapping(value = "/myorders", method = {RequestMethod.GET, RequestMethod.POST}) 
+    @RequestMapping(value = "/myorders", method = {RequestMethod.GET, RequestMethod.POST})
     public String myOrders(@RequestParam(name = "user", required = false) String username,
             Model model, HttpSession session) {
         try {
-        User sessionUser = getSessionUser(session);
+            User sessionUser = getSessionUser(session);
 
-        model.addAttribute("currentUser", sessionUser.getUsername());
-        model.addAttribute("sessionUser", sessionUser);
-        
-        List<Invoice> invoices = invoiceRepo.FindByUser(sessionUser);
-        model.addAttribute("orders", invoices);
-        if(!username.equals(sessionUser.getUsername())) {
-            model.addAttribute("errorMessage", "Error only the owner of " + username + " Account can view their orders, The current account is " + sessionUser.getUsername());
-            return "home";
-        }
+            model.addAttribute("currentUser", sessionUser.getUsername());
+            model.addAttribute("sessionUser", sessionUser);
 
-        return "myorders"; 
+            List<Invoice> invoices = invoiceRepo.FindByUser(sessionUser.getUsername());
+            model.addAttribute("orders", invoices);
+            if (!username.equals(sessionUser.getUsername()) && !sessionUser.getUserRole().equals(Roles.ADMIN)) {
+                model.addAttribute("errorMessage", "Error only the owner of " + username + " Account can view their orders, The current account is " + sessionUser.getUsername());
+                return "home";
+            }
+
+            return "myorders";
         } catch (Exception ex) {
             LOG.warn(ex);
-            model.addAttribute("error message", ex.getMessage());
+            model.addAttribute("errorMessage", ex.getMessage());
             return "home";
         }
     }
@@ -204,10 +253,9 @@ public class ServerController {
         model.addAttribute("sessionUser", sessionUser);
         String message = "";
         String errorMessage = "";
-        
 
-        if(action != null) {
-            if(action.equals("addToCart")) {
+        if (action != null) {
+            if (action.equals("addToCart")) {
                 Item item = shoppingService.ItemAddedToBasket(itemId);
                 Item newitem = new Item();
                 newitem.setId(item.getId());
@@ -215,13 +263,13 @@ public class ServerController {
                 newitem.setUuid(item.getUuid());
                 newitem.setPrice(item.getPrice());
                 newitem.setQuantity(1);
-                if(newitem != null) {
+                if (newitem != null) {
                     userBasket.addItemToBasket(newitem);
                     message = "Item added to basket";
                 } else {
                     errorMessage = "Unknow Item Error";
                 }
-            }  
+            }
         }
 
         List<Item> availableItems = shoppingService.getAviliableItems();
@@ -233,7 +281,7 @@ public class ServerController {
 
         return "home";
     }
-    
+
     @RequestMapping(value = "/about", method = {RequestMethod.GET, RequestMethod.POST})
     public String aboutCart(Model model, HttpSession session) {
 
@@ -241,21 +289,21 @@ public class ServerController {
         User sessionUser = getSessionUser(session);
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("currentUser", sessionUser.getUsername());
-        
+
         // used to set tab selected
         model.addAttribute("selectedPage", "about");
         return "about";
     }
-    
+
     @RequestMapping(value = "/addItem", method = RequestMethod.GET)
     public String AddNewItem(Model model, HttpSession session) {
         User sessionUser = getSessionUser(session);
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("currentUser", sessionUser.getUsername());
-        
+
         // used to set tab selected
         model.addAttribute("selectedPage", "additem");
-        if(sessionUser.getUserRole().equals(Roles.ADMIN)) {
+        if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
             return "additem";
         } else {
             model.addAttribute("errorMessage", "You must be an admin to add items");
@@ -263,16 +311,16 @@ public class ServerController {
         }
     }
 
-    @RequestMapping(value = "/addItem", method = RequestMethod.POST) 
-    public String AddNewItem(@RequestParam(value = "action", required=false) String action,
-            @RequestParam(value = "itemName", required=false) String itemName,
-            @RequestParam(value = "itemQuantity", required=false) Integer itemQuantity, 
-            @RequestParam(value = "itemPrice", required=false) Double itemPrice,
+    @RequestMapping(value = "/addItem", method = RequestMethod.POST)
+    public String AddNewItem(@RequestParam(value = "action", required = false) String action,
+            @RequestParam(value = "itemName", required = false) String itemName,
+            @RequestParam(value = "itemQuantity", required = false) Integer itemQuantity,
+            @RequestParam(value = "itemPrice", required = false) Double itemPrice,
             Model model, HttpSession session) {
-        
+
         User sessionUser = getSessionUser(session);
 
-        if(sessionUser.getUserRole().equals(Roles.ADMIN) && action.equals("addNewItem")) {
+        if (sessionUser.getUserRole().equals(Roles.ADMIN) && action.equals("addNewItem")) {
             Item item = new Item();
             item.setName(itemName);
             item.setQuantity(itemQuantity);
@@ -283,23 +331,23 @@ public class ServerController {
         } else {
             model.addAttribute("errorMessage", "Unable to add item please make sure you a admin user");
             return "home";
-        } 
+        }
 
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("currentUser", sessionUser.getUsername());
-        
+
         // used to set tab selected
         model.addAttribute("selectedPage", "about");
         return "additem";
     }
-    
+
     @RequestMapping(value = "/delItem", method = RequestMethod.GET)
     public String DeleteItem(Model model, HttpSession session) {
         User sessionUser = getSessionUser(session);
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("currentUser", sessionUser.getUsername());
-        
-        if(sessionUser.getUserRole().equals(Roles.ADMIN)) {
+
+        if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
             model.addAttribute("items", shoppingService.getAviliableItems());
             return "delitem";
         } else {
@@ -309,15 +357,15 @@ public class ServerController {
     }
 
     @RequestMapping(value = "/delItem", method = RequestMethod.POST)
-    public String DeleteItem(@RequestParam(value = "itemId", required=true) Long itemId,
-            @RequestParam(value = "action", required=false) String action,
+    public String DeleteItem(@RequestParam(value = "itemId", required = true) Long itemId,
+            @RequestParam(value = "action", required = false) String action,
             Model model, HttpSession session) {
         User sessionUser = getSessionUser(session);
         model.addAttribute("sessionUser", sessionUser);
-        model.addAttribute("currentUser", sessionUser.getUsername());        
+        model.addAttribute("currentUser", sessionUser.getUsername());
 
-        if(sessionUser.getUserRole().equals(Roles.ADMIN) && action.equals("deleteItem")) {
-            if(shoppingService.ItemExistsId(itemId)) {
+        if (sessionUser.getUserRole().equals(Roles.ADMIN) && action.equals("deleteItem")) {
+            if (shoppingService.ItemExistsId(itemId)) {
                 model.addAttribute("message", "Item Deleted");
                 shoppingService.removeItemById(itemId);
             } else {
@@ -328,25 +376,22 @@ public class ServerController {
         } else {
             model.addAttribute("errorMessage", "Unable to remove item please make sure you a admin user and the action is set to deleteItem");
             return "home";
-        } 
+        }
     }
-
-
-
 
     @RequestMapping(value = "/contact", method = {RequestMethod.GET, RequestMethod.POST})
     public String contactCart(Model model, HttpSession session) {
 
         // get sessionUser from session
         User sessionUser = getSessionUser(session);
-        model.addAttribute("sessionUser", sessionUser);        
+        model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("currentUser", sessionUser.getUsername());
-        
+
         // used to set tab selected
         model.addAttribute("selectedPage", "contact");
         return "contact";
     }
-    
+
     @ExceptionHandler(Exception.class)
     public String myExceptionHandler(final Exception e, Model model, HttpServletRequest request) {
         //logger.error(strStackTrace); // send to logger first
@@ -354,6 +399,5 @@ public class ServerController {
         model.addAttribute("error", e.getCause());
         return "error"; // default friendly exception message for sessionUser
     }
-
 
 }

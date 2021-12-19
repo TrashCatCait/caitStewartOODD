@@ -4,7 +4,7 @@
 <jsp:include page="header.jsp" />
 <!-- Begin page content -->
 <main role="main" class="container">
-    <H1>Create a New Account</H1>
+    <H1>${currentUser} Order's</H1>
     <div style="color:red;">${errorMessage}</div>
     <div style="color:green;">${message}</div>
     <ul>

@@ -46,6 +46,7 @@ public class ShoppingServiceImpl implements ShoppingService {
         newInvoice.setInvoiceNumber(UUID.randomUUID().toString());
         newInvoice.setDateOfPurchase(new Date());
         newInvoice.setStatus(InvoiceStatus.OUTSTANDING);
+        newInvoice.setUsername(user.getUsername());
 
         for (int i = 0; i < items.size(); i++) {
             Item item = items.get(i);

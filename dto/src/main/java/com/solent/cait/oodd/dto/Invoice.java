@@ -36,6 +36,9 @@ public class Invoice {
     @Column(name="user")
     private User purchaser;
     
+    @Column(name="username")
+    private String username;
+    
     private InvoiceStatus status;
 
     @Id
@@ -50,6 +53,14 @@ public class Invoice {
 
     public String getInvoiceNumber() {
         return invoiceNumber;
+    }
+    
+    public String getUsername() {
+        return username;
+    }
+    
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public void setInvoiceNumber(String invoiceNumber) {
