@@ -15,6 +15,7 @@ import com.solent.cait.oodd.dto.Item;
 import com.solent.cait.oodd.dao.ItemCatalogRepository;
 import com.solent.cait.oodd.dao.InvoiceRepository;
 import com.solent.cait.oodd.dto.Invoice;
+import com.solent.cait.oodd.dto.InvoiceStatus;
 import com.solent.cait.oodd.dto.User;
 import com.solent.cait.oodd.model.UserBasket;
 import java.time.LocalDate;
@@ -22,48 +23,68 @@ import java.util.Date;
 import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 
-
 /**
  *
  * @author cgallen
  */
-
 public class ShoppingServiceImpl implements ShoppingService {
 
-    
     @Autowired
     private InvoiceRepository invoiceRepo;
-    
+
     @Autowired
     private ItemCatalogRepository itemRepo;
 
+    //Returns True if succeeded.
     @Override
-    public void purchaseItems(UserBasket basket, User user) {
+    public Boolean purchaseItems(List<Item> items, Double total, User user) {
         Invoice newInvoice = new Invoice();
-        newInvoice.setPurchasedItems(basket.getCurrentBasketItems());
-        newInvoice.setAmountDue(basket.getTotal());
+
+        newInvoice.setPurchasedItems(items);
+        newInvoice.setAmountDue(total);
         newInvoice.setPurchaser(user);
-        
+        newInvoice.setInvoiceNumber(UUID.randomUUID().toString());
         newInvoice.setDateOfPurchase(new Date());
-        
+        newInvoice.setStatus(InvoiceStatus.OUTSTANDING);
+
+        for (int i = 0; i < items.size(); i++) {
+            Item item = items.get(i);
+            //Get the database version of this item 
+            Optional<Item> repoItem = itemRepo.findById(item.getId());
+
+            //update stock items 
+            if (repoItem.isEmpty()) {
+                return false;
+
+            } else {
+                if (repoItem.get().getQuantity() < item.getQuantity()) {
+                    return false;
+                }
+                repoItem.get().setQuantity(repoItem.get().getQuantity() - item.getQuantity());
+                itemRepo.save(repoItem.get());
+            }
+        }
+
         invoiceRepo.save(newInvoice);
+        return true;
     }
-    
-    @Override
-    public void removeItemById(Long Id) {
+
+
+
+@Override
+public void removeItemById(Long Id) {
         itemRepo.deleteById(Id); 
     }
     
     @Override
-    public Boolean ItemExistsId(Long id) {
+public Boolean ItemExistsId(Long id) {
         return itemRepo.existsById(id);
     }
 
     @Override
-    public Item ItemAddedToBasket(Long id) {
+public Item ItemAddedToBasket(Long id) {
         Optional<Item> item = itemRepo.findById(id);
         if(item.isPresent()){
-            item.get().setQuantity(item.get().getQuantity() - 1);
             itemRepo.save(item.get());
             return item.get();
         }
@@ -71,16 +92,11 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
     
     @Override
-    public void ItemRemovedToBasket(Long id) {
-        Optional<Item> item = itemRepo.findById(id);
-        if(item.isPresent()){
-            item.get().setQuantity(item.get().getQuantity() + 1);
-            itemRepo.save(item.get());
-        }
+public void ItemRemovedToBasket(Long id) {
     }
     
     @Override
-    public void addItem(Item item) {
+public void addItem(Item item) {
         itemRepo.save(item);
     }
 
@@ -89,9 +105,8 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
 
     @Override
-    public List<Item> getAviliableItems() {
+public List<Item> getAviliableItems() {
         return itemRepo.findAll();
     }
 
 }
-

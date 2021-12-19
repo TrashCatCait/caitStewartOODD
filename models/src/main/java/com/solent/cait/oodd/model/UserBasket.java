@@ -16,7 +16,7 @@ public interface UserBasket {
     
     void addItemToBasket(Item item);
     
-    void removeItem(Long id);
+    void removeItem(String itemUUID);
 
     double getTotal();
 }

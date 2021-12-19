@@ -6,9 +6,13 @@ import org.springframework.stereotype.Repository;
 import com.solent.cait.oodd.dto.Invoice;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import com.solent.cait.oodd.dto.User;
 import java.util.List;
 
 
 @Repository
 public interface InvoiceRepository  extends JpaRepository<Invoice,Long>{
+    
+    @Query(value = "SELECT user FROM Invoice user WHERE user = :userIn")
+    public List<Invoice> FindByUser(@Param("userIn")User userIn);
 }

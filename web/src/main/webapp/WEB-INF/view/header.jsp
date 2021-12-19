@@ -35,10 +35,13 @@
                         <li class="list-item"><a href="./addItem">Add Items</a></li>
                         <li class="list-item"><a href="./delItem">Remove Item</a></li>
                         <li class="list-item"><a href="./users">All Users</a></li>
+                        <li class="list-item"><a href="./orders">All Orders</a></li>
                         </c:if>
                         <c:if test="${sessionUser.getUserRole()!='ANONYMOUS'}">
                         <li class="list-item"><a href="./modifyUser?user=${sessionUser.getUsername()}">My User</a></li>
+                        <li class="list-item"><a href="./myorders?user=${sessionUser.getUsername()}">My Orders</a></li> 
                         </c:if>
+                        <li class="list-item"><a href="./basket">My Basket</a></li> 
                     </ul>
                 </div>
             </nav>

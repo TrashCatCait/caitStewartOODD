@@ -5,6 +5,8 @@
 package com.solent.cait.oodd.service;
 
 import java.util.List;
+import java.util.UUID;
+
 import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -70,7 +72,7 @@ public class PopulateDatabaseOnStart {
         defaultItem.setName("Hen");
         defaultItem.setPrice(400.00);
         defaultItem.setQuantity(19);
-        
+        defaultItem.setUuid(UUID.randomUUID().toString());
         itemRepo.save(defaultItem);
     }
 }

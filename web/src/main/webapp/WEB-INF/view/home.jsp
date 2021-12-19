@@ -15,32 +15,15 @@
             <div style="color:red;">${errorMessage}</div>
             <div style="color:green;">${message}</div>
             <c:forEach var="item" items="${availableItems}">
-            <h4>${item.name}</h4>
-            <h4>${item.price}</h4>
+            <h4>Name: ${item.name}</h4>
+            <h4>Price: ${item.price}</h4>
+            <h4>Stock Remaining: ${item.quantity}</h4>
             <form action="./home" method="POST">
             <input type="hidden" name="itemId" value="${item.id}">
             <input type="hidden" name="action" value="addToCart">
             <button type="submit" >Add Item</button>
             </form>
             </c:forEach>
-
-            <h1>Basket</h1>
-            <c:forEach var="item" items="${basketItems}">
-            <h4>${item.name}</h4>
-            <h4>${item.price}</h4>
-            <form action="./home" method="POST">
-            <input type="hidden" name="itemId" value="${item.id}">
-            <input type="hidden" name="action" value="removeItem">
-            <button type="submit" >Remove Item</button>
-            </form>
-            </c:forEach>
-
-            <form action="./home" method="POST">
-                <input type="hidden" name="action" value="checkout">
-                <button type="submit">Checkout</button>
-            </form>
-        </body>
-
     
 </main>
 <jsp:include page="footer.jsp" />

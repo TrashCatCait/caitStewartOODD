@@ -17,6 +17,7 @@ import javax.persistence.Id;
 @Entity
 public class Item {
     private String name = null;
+    private String uuid=null;
     private Integer count = 0;
     private Double itemPrice = 0.0;
     private Long id = (long) 0;
@@ -40,6 +41,15 @@ public class Item {
     public void setId(Long id) {
         this.id = id;
     }
+
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuuid) {
+        this.uuid = uuuid;
+    }
+
 
     public String getName() {
         return name;

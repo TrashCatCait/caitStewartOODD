@@ -16,7 +16,7 @@
 
     <c:forEach var="item" items="${items}">
         <ul>
-            <li><p>${item.name}</p><form method="POST" action="./delItem"><input type="hidden" name="action" value="deleteItem"/><input type="hidden" name="itemId" value="${item.id}"/><button type="submit">Select Item</button></form></li>
+            <li><p>Item Name: ${item.name}, Current Stock: ${item.quantity}</p><form method="POST" action="./delItem"><input type="hidden" name="action" value="deleteItem"/><input type="hidden" name="itemId" value="${item.id}"/><button type="submit">Select Item</button></form></li>
         </ul>
         
         

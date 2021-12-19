@@ -17,7 +17,7 @@ public interface ShoppingService {
     
     void addItem(Item item);
     
-    void purchaseItems(UserBasket basket, User user); 
+    Boolean purchaseItems(List<Item> items, Double total, User user); 
    
     void removeItemById(Long Id);
 

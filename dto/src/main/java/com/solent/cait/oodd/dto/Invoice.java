@@ -14,8 +14,9 @@ import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
+import javax.persistence.Column;
 import javax.persistence.Id;
-import javax.persistence.OneToMany;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToOne;
  
 
@@ -23,14 +24,19 @@ import javax.persistence.OneToOne;
 public class Invoice {
 
     private Long id;
+    
+    private String invoiceNumber;
 
     private Date dateOfPurchase;
 
     private Double amountDue;
-
+    
     private List<Item> purchasedItems;
-
+    
+    @Column(name="user")
     private User purchaser;
+    
+    private InvoiceStatus status;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -40,6 +46,22 @@ public class Invoice {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getInvoiceNumber() {
+        return invoiceNumber;
+    }
+
+    public void setInvoiceNumber(String invoiceNumber) {
+        this.invoiceNumber = invoiceNumber;
+    }
+
+    public void setStatus(InvoiceStatus status) {
+        this.status = status;
+    }
+
+    public InvoiceStatus getStatus() {
+        return status;
     }
 
     public Date getDateOfPurchase() {
@@ -58,7 +80,7 @@ public class Invoice {
         this.amountDue = amountDue;
     }
 
-    @OneToMany
+    @ManyToMany
     public List<Item> getPurchasedItems() {
         return purchasedItems;
     }

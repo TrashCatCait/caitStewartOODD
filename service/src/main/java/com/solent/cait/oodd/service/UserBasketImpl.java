@@ -22,38 +22,38 @@ public class UserBasketImpl implements UserBasket {
     @Override
     public List<Item> getCurrentBasketItems() {
         List<Item> itemlist = new ArrayList();
-        for (int i = 0; i < itemMap.size; i++) {
-            Item shoppingCartItem = itemMap.g;
-            itemlist.add(shoppingCartItem);
+        for (String itemUUID : itemMap.keySet()) {
+            Item item = itemMap.get(itemUUID);
+            itemlist.add(item);
         }
         return itemlist;
     }
 
     @Override
     public void addItemToBasket(Item item) {
-        // itemMap.put(shoppingItem.getUuid(), shoppingItem);
-        itemMap.put
         // ANSWER
         boolean itemExists = false;
         for (String itemUUID : itemMap.keySet()) {
             Item shoppingCartItem = itemMap.get(itemUUID);
-            if (shoppingCartItem.getName().equals(item.getName())){
+            if (shoppingCartItem.getName().equals(item.getName())) {
                 Integer q = shoppingCartItem.getQuantity();
-                shoppingCartItem.setQuantity(q+1);
+                shoppingCartItem.setQuantity(q + 1);
                 itemExists = true;
                 break;
             }
         }
-        if (!itemExists){
+        if (!itemExists) {
+            
             item.setQuantity(1);
+            itemMap.put(item.getUuid(), item);
         }
     }
 
     @Override
-    public void removeItem(Long id) {
+    public void removeItem(String itemUUID) {
         //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
         // ANSWER
-        itemMap.remove("id", id);
+        itemMap.remove(itemUUID);
     }
 
     @Override
