@@ -64,6 +64,18 @@
                 <label>Telephone: </label>
                 <input type="text" name="telephone" value="${user.address.telephone}"/>
             </p>
+            <p>
+                <label>Card Number: </label>
+                <input type="text" name="cardNum" value="${user.cardNumber}"/>
+            </p>
+            <p>
+                <label>Card Expire: </label>
+                <input type="text" name="cardExpire" value="${user.cardExpire}"/>
+            </p>
+            <p>
+                <label>Name on Card </label>
+                <input type="text" name="nameOnCard" value="${user.nameOnCard}"/>
+            </p>
             <button type="submit">Update ${user.username}'s Details</button>
         </form>
 

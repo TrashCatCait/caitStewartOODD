@@ -23,7 +23,10 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestParam;
 import com.solent.cait.oodd.dto.Item;
+import java.util.Collection;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
@@ -198,8 +201,75 @@ public class ServerController {
 
     }
 
+    @RequestMapping(value = "/updateItem", method = {RequestMethod.GET, RequestMethod.POST})
+    public String UpdateItems(@RequestParam(value = "action", required = false) String action,
+            @RequestParam(value = "itemId", required = false) String itemIdStr,
+            @RequestParam(value = "itemName", required = false) String itemName,
+            @RequestParam(value = "itemQuantity", required = false) String itemQuantityStr,
+            @RequestParam(value = "itemPrice", required = false) String itemPriceStr,
+            @RequestParam(value = "itemType", required = false) String itemType,
+            Model model, HttpSession session) {
+        User sessionUser = getSessionUser(session);
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("currentUser", sessionUser.getUsername());
+
+        Long itemId;
+        Integer itemQuantity;
+        Double itemPrice;
+        Item item;
+        if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
+            if (action != null) {
+                try {
+                    itemId = Long.parseLong(itemIdStr);
+                    if (action.equals("findItem")) {
+                        item = shoppingService.ItemAddedToBasket(itemId);
+                        if (item == null) {
+                            model.addAttribute("errorMessage", "Item not found");
+                        } else {
+                            model.addAttribute("newItem", item);
+                        }
+                    } else if (action.equals("updateItem")) {
+                        item = shoppingService.ItemAddedToBasket(itemId);
+                        if (item == null) {
+                            model.addAttribute("errorMessage", "Item not found");
+                            return "home";
+                        } else {
+                            try {
+                                itemPrice = Double.parseDouble(itemPriceStr);
+                                itemQuantity = Integer.parseInt(itemQuantityStr);
+                                item.setName(itemName);
+                                item.setPrice(itemPrice);
+                                item.setQuantity(itemQuantity);
+                                item.setType(itemType);
+                                shoppingService.addItem(item);
+                                model.addAttribute("message", "item updated");
+                            } catch (Exception ex) {
+                                LOG.warn(ex);
+                                model.addAttribute("errorMessage", "Unable to parse item Quantity: " + itemQuantityStr + " Or item Price" + itemPriceStr);
+
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    LOG.warn(ex);
+                    model.addAttribute("errorMessage", "Unable to parse item id: " + itemIdStr);
+                    return "home";
+                }
+
+            }
+
+            model.addAttribute("items", shoppingService.getAviliableItems());
+            return "updateitems";
+        } else {
+            model.addAttribute("errorMessage", "You must be an admin to update items");
+            return "home";
+        }
+    }
+
     @RequestMapping(value = "/orders", method = {RequestMethod.GET, RequestMethod.POST})
-    public String orders(Model model, HttpSession session) {
+    public String orders(Model model, HttpSession session,
+            @RequestParam(value = "searchStr", required = false) String searchStr,
+            @RequestParam(value = "action", required = false) String action) {
         User sessionUser = getSessionUser(session);
 
         model.addAttribute("currentUser", sessionUser.getUsername());
@@ -208,6 +278,20 @@ public class ServerController {
         if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
 
             List<Invoice> invoices = invoiceRepo.findAll();
+
+            if (action != null) {
+                if (searchStr == null) {
+                    model.addAttribute("errorMessage", "Please enter a username to search by");
+                } else if (action.equals("search")) {
+                    List<Invoice> userInvoices = invoiceRepo.FindByUsername(searchStr);
+                    List<Invoice> uuidInvoices = invoiceRepo.FindByInoviceNum(searchStr);
+                    invoices = Stream.of(userInvoices, uuidInvoices).flatMap(Collection::stream).collect(Collectors.toList());
+                } else {
+                    LOG.warn("Unknown Action on orders page actionName: " + action);
+                    model.addAttribute("errorMessage", "Unknown action used on Orders page please use a known action as action: " + action + " isn't valid for this page");
+                }
+            }
+
             model.addAttribute("orders", invoices);
 
             return "orders";
@@ -387,9 +471,20 @@ public class ServerController {
     }
 
     @RequestMapping(value = "/delItem", method = RequestMethod.POST)
-    public String DeleteItem(@RequestParam(value = "itemId", required = true) Long itemId,
+    public String DeleteItem(@RequestParam(value = "itemId", required = true) String itemIdStr,
             @RequestParam(value = "action", required = false) String action,
             Model model, HttpSession session) {
+
+        Long itemId;
+
+        try {
+            itemId = Long.parseLong(itemIdStr);
+        } catch (Exception ex) {
+            LOG.warn(ex);
+            model.addAttribute("errorMessage", "Unable to parse item id");
+            return "home";
+        }
+
         User sessionUser = getSessionUser(session);
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("currentUser", sessionUser.getUsername());

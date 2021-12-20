@@ -15,4 +15,7 @@ public interface InvoiceRepository  extends JpaRepository<Invoice,Long>{
     
     @Query(value = "SELECT * FROM Invoice WHERE username = :userIn", nativeQuery = true)
     public List<Invoice> FindByUsername(@Param("userIn")String userIn);
+    
+    @Query(value = "SELECT * FROM Invoice WHERE invoiceNumber = :invoiceNum", nativeQuery = true)
+    public List<Invoice> FindByInoviceNum(@Param("invoiceNum")String invoiceNum);
 }

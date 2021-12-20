@@ -15,6 +15,7 @@
             <div style="color:red;">${errorMessage}</div>
             <div style="color:green;">${message}</div>
             
+            <h4>Search by name or item type</h4>
             <form action="./home" method="POST">
                 <input type="hidden" name="action" value="search"/>
                 <input type="text" name="searchTxt"/>

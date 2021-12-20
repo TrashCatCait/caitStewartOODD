@@ -158,7 +158,13 @@ public class LoginControl {
             model.addAttribute("errorMessage", errorMessage);
             return "register";
         }
-
+        
+        //If not empty that username already exists and we want to stop people using the same name as this could cause issues
+        if(!userRepository.findByUsername(username).isEmpty()) {
+            model.addAttribute("errorMessage", "Sorry that user name is taken already. Please chose another");
+            return "register";
+        }
+        
         User newUser = new User();
         newUser.setUserRole(Roles.CUSTOMER);
         newUser.setUsername(username);
@@ -236,6 +242,9 @@ public class LoginControl {
             @RequestParam(value = "accountEnabled", required = false) String accountEnabled,
             @RequestParam(value = "password", required = false) String password,
             @RequestParam(value = "passwordConfirm", required = false) String passwordConfirm,
+            @RequestParam(value = "cardNum", required = false) String cardNumber,
+            @RequestParam(value = "cardExpire", required = false) String cardExpire,
+            @RequestParam(value = "nameOnCard", required = false) String nameOnCard,
             Model model,
             HttpSession session) {
 
@@ -266,6 +275,9 @@ public class LoginControl {
             address.setMobile(mobile);
             address.setPostcode(postcode);
             address.setTelephone(telephone);
+            modifyUser.setCardNumber(cardNumber);
+            modifyUser.setCardExpire(cardExpire);
+            modifyUser.setNameOnCard(nameOnCard);
             modifyUser.setAddress(address);
             modifyUser = userRepository.save(modifyUser);
             return "home";

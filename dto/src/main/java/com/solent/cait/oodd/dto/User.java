@@ -36,6 +36,12 @@ public class User {
     private Roles userRole;
 
     private Boolean enabled = true;
+    
+    private String cardNumber;
+    
+    private String cardExpire;
+    
+    private String nameOnCard;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,6 +53,30 @@ public class User {
         this.id = id;
     }
 
+    public String getCardNumber() {
+        return cardNumber;
+    }
+    
+    public void setCardNumber(String cardNumber) {
+        this.cardNumber = cardNumber;
+    }
+    
+    public String getNameOnCard() {
+        return nameOnCard;
+    }
+    
+    public void setNameOnCard(String nameOnCard) {
+        this.nameOnCard = nameOnCard;
+    }
+    
+    public String getCardExpire() {
+        return cardExpire;
+    }
+    
+    public void setCardExpire(String cardExpire) {
+        this.cardExpire = cardExpire;
+    }
+    
     public Roles getUserRole() {
         return userRole;
     }

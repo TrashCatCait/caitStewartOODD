@@ -25,23 +25,25 @@
             <nav class="navbar">
                 <div>
                     <ul class="nav-list"> 
-                        <li class="list-item"><a href="./home">Home</a></li>
-                        <li class="list-item"><a href="./about">About</a></li> 
-                        <li class="list-item"><a href="./contact">Contact</a></li>
-                        <li class="list-item"><a href="./login">Login</a></li> 
-                        <li class="list-item"><a href="./logout">Logout</a></li>
-                        <li class="list-item">User: ${currentUser}</li>
+                        <li class="list-link"><a href="./home">Home</a></li>
+                        <li class="list-link"><a href="./about">About</a></li> 
+                        <li class="list-link"><a href="./contact">Contact</a></li>
+                        <li class="list-link"><a href="./login">Login</a></li> 
+                        <li class="list-link"><a href="./logout">Logout</a></li>
+                        <li class="list-link">User: ${currentUser}</li>
                         <c:if test="${sessionUser.getUserRole()=='ADMIN'}">
-                        <li class="list-item"><a href="./addItem">Add Items</a></li>
-                        <li class="list-item"><a href="./delItem">Remove Item</a></li>
-                        <li class="list-item"><a href="./users">All Users</a></li>
-                        <li class="list-item"><a href="./orders">All Orders</a></li>
+                        <li class="list-link"><a href="./addItem">Add Items</a></li>
+                        <li class="list-link"><a href="./delItem">Remove Item</a></li>
+                        <li class="list-link"><a href="./updateItem">Update Item</a></li>
+                        <li class="list-link"><a href="./users">All Users</a></li>
+                        <li class="list-link"><a href="./orders">All Orders</a></li>
                         </c:if>
-                        <c:if test="${sessionUser.getUserRole()!='ANONYMOUS'}">
-                        <li class="list-item"><a href="./modifyUser?user=${sessionUser.getUsername()}">My User</a></li>
-                        <li class="list-item"><a href="./myorders?user=${sessionUser.getUsername()}">My Orders</a></li> 
+                        <!-- Only Display this if the user is an admin or customer -->
+                        <c:if test="${sessionUser.getUserRole()=='ADMIN' || sessionUser.getUserRole()=='CUSTOMER'}">
+                        <li class="list-link"><a href="./modifyUser?user=${sessionUser.getUsername()}">My User</a></li>
+                        <li class="list-link"><a href="./myorders?user=${sessionUser.getUsername()}">My Orders</a></li> 
                         </c:if>
-                        <li class="list-item"><a href="./basket">My Basket</a></li> 
+                        <li class="list-link"><a href="./basket">My Basket</a></li> 
                     </ul>
                 </div>
             </nav>
