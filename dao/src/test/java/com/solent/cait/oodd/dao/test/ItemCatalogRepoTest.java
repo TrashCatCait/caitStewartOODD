@@ -26,6 +26,8 @@ import java.util.List;
  * @author caitlyn
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = DAOTestConfiguration.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
 public class ItemCatalogRepoTest {
 
     private static final Logger LOG = LogManager.getLogger(ItemCatalogRepoTest.class);

@@ -39,6 +39,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * @author caitlyn
  */
 @RunWith(SpringJUnit4ClassRunner.class)
+@ContextConfiguration(classes = DAOTestConfiguration.class, loader = AnnotationConfigContextLoader.class)
+@Transactional
 public class UserRepoTest {
 
     private static final Logger LOG = LogManager.getLogger(UserRepoTest.class);

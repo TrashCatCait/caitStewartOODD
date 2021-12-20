@@ -11,6 +11,11 @@ import org.junit.Test;
 import static org.junit.Assert.*;
 import com.solent.cait.oodd.model.ShoppingService;
 import com.solent.cait.oodd.service.ServiceObjectFactory;
+import com.solent.cait.oodd.dto.User;
+import com.solent.cait.oodd.dto.Item;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.UUID;
 
 /**
  *
@@ -30,4 +35,6 @@ public class ShoppingServiceTest {
     public void serviceNotNull() {
         assertNotNull(shoppingService);
     }
+    
+
 }

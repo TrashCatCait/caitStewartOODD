@@ -52,11 +52,13 @@ public class UserBasketTest {
         
         assertEquals(1, basket.getCurrentBasketItems().size());
         
+        //Check get total works 
+        assertEquals(100.00, basket.getTotal(), 0.01);
+        
         basket.removeItem(newItem.getUuid());
         
         assertEquals(0, basket.getCurrentBasketItems().size());
 
     }
-
-    // add your own tests here
+    
 }

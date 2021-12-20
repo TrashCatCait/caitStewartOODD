@@ -21,7 +21,7 @@ public class UserBasketImpl implements UserBasket {
 
     @Override
     public List<Item> getCurrentBasketItems() {
-        List<Item> itemlist = new ArrayList();
+        List<Item> itemlist = new ArrayList<>();
         for (String itemUUID : itemMap.keySet()) {
             Item item = itemMap.get(itemUUID);
             itemlist.add(item);
