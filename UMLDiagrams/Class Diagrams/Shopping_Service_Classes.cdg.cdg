@@ -19,14 +19,13 @@
       <Constructors/>
       <Methods/>
     </Class>
-    <Class name="Invoice" package="" visibility="public" xPosition="414.0" yPosition="599.0">
+    <Class name="Invoice" package="" visibility="public" xPosition="414.0" yPosition="607.0">
       <Fields>
         <Field name="invoiceUUID" type="String" visibility="private"/>
         <Field name="dateOfPurchase" type="Date" visibility="private"/>
         <Field name="totalPrice" type="Double" visibility="private"/>
         <Field name="purchaseItems" type="List&lt;Item&gt;" visibility="private"/>
         <Field name="purchaser" type="User" visibility="private"/>
-        <Field name="status" type="InvoiceStatus" visibility="private"/>
       </Fields>
       <Constructors/>
       <Methods/>
@@ -118,20 +117,13 @@
         <Literal name="DEACTIVATED"/>
       </Literals>
     </Enum>
-    <Enum name="InvoiceStatus" package="" visibility="public" xPosition="485.0" yPosition="914.0">
-      <Literals>
-        <Literal name="OUTSTANDING"/>
-        <Literal name="FUFFILED"/>
-        <Literal name="CANCELLED"/>
-      </Literals>
-    </Enum>
   </ClassDiagramComponents>
   <ClassDiagramRelations>
-    <UseRelation name="Creates " source="ShoppingService" target="Invoice" sourceCardinality="1..1" targetCardinality="0..*"/>
+    <UseRelation name="" source="Invoice" target="User" sourceCardinality="1..1" targetCardinality="0..*"/>
     <UseRelation name="Shopping Service Uses Item" source="ShoppingService" target="Item" sourceCardinality="1..1" targetCardinality="1..1"/>
     <UseRelation name="Uses Shopping Service" source="WebApp JSP Frontend" target="ShoppingService" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Creates " source="ShoppingService" target="Invoice" sourceCardinality="1..1" targetCardinality="0..*"/>
     <UseRelation name="Uses Items" source="UserBasket" target="Item" sourceCardinality="1..1" targetCardinality="0..*"/>
-    <UseRelation name="" source="Invoice" target="User" sourceCardinality="1..1" targetCardinality="0..*"/>
     <UseRelation name="Uses Basket" source="ShoppingService" target="UserBasket" sourceCardinality="1..1" targetCardinality="1..1"/>
   </ClassDiagramRelations>
 </ClassDiagram>

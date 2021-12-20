@@ -26,7 +26,6 @@
         <Field name="totalPrice" type="Double" visibility="private"/>
         <Field name="purchaseItems" type="List&lt;Item&gt;" visibility="private"/>
         <Field name="purchaser" type="User" visibility="private"/>
-        <Field name="status" type="InvoiceStatus" visibility="private"/>
       </Fields>
       <Constructors/>
       <Methods/>
@@ -152,6 +151,9 @@
     <Interface name="HttpServeletResponse" package="" visibility="public" xPosition="277.0" yPosition="66.0">
       <Methods/>
     </Interface>
+    <Interface name="HttpServerelet" package="" visibility="public" xPosition="179.0" yPosition="245.0">
+      <Methods/>
+    </Interface>
     <Enum name="Roles" package="" visibility="public" xPosition="1755.0" yPosition="75.0">
       <Literals>
         <Literal name="ADMIN"/>
@@ -159,38 +161,27 @@
         <Literal name="DEACTIVATED"/>
       </Literals>
     </Enum>
-    <Enum name="InvoiceStatus" package="" visibility="public" xPosition="1135.0" yPosition="799.0">
-      <Literals>
-        <Literal name="OUTSTANDING"/>
-        <Literal name="FUFFILED"/>
-        <Literal name="CANCELLED"/>
-      </Literals>
-    </Enum>
-    <Interface name="HttpServerelet" package="" visibility="public" xPosition="179.0" yPosition="245.0">
-      <Methods/>
-    </Interface>
   </ClassDiagramComponents>
   <ClassDiagramRelations>
-    <HasRelation name="Has" source="Invoice" target="InvoiceStatus" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
-    <UseRelation name="UsesObjectFactory" source="HttpSession" target="ObjectFactory" sourceCardinality="0..*" targetCardinality="1..1"/>
-    <UseRelation name="UsesShoppingService" source="WebApp JSP Frontend" target="ShoppingService" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Stores Invoice in here" source="ShoppingService" target="InvoiceDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Uses invoices" source="HttpSession" target="InvoiceDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Creates" source="ServiceObjectFactory" target="UserBasketImpl" sourceCardinality="1..1" targetCardinality="0..*"/>
-    <UseRelation name="Sends Response" source="HttpServeletResponse" target="HttpServerelet" sourceCardinality="0..*" targetCardinality="1..1"/>
-    <HasRelation name="Has Role" source="User" target="Roles" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
-    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="UserBasketImpl" target="UserBasket"/>
     <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="ShoppingServiceImpl" target="ShoppingService"/>
-    <UseRelation name="Sends Request" source="HttpServeletRequest" target="HttpServerelet" sourceCardinality="0..*" targetCardinality="1..1"/>
-    <UseRelation name="Stores Users" source="LoginController" target="UserDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="UsesServicesObject" source="ObjectFactory" target="ServiceObjectFactory" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Uses login" source="HttpSession" target="LoginController" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="CompilesToServelet" source="HttpServerelet" target="WebApp JSP Frontend" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Creates &amp; Uses This" source="ShoppingService" target="Item" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Creates Users" source="LoginController" target="User" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Uses HttpSessions" source="HttpSession" target="WebApp JSP Frontend" sourceCardinality="0..*" targetCardinality="1..*"/>
-    <UseRelation name="Creates Invoice" source="ShoppingService" target="Invoice" sourceCardinality="1..1" targetCardinality="1..1"/>
     <UseRelation name="Creates" source="ServiceObjectFactory" target="ShoppingServiceImpl" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Uses login" source="HttpSession" target="LoginController" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Stores Invoice in here" source="ShoppingService" target="InvoiceDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="UsesServicesObject" source="ObjectFactory" target="ServiceObjectFactory" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="UsesShoppingService" source="WebApp JSP Frontend" target="ShoppingService" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Uses invoices" source="HttpSession" target="InvoiceDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Creates Invoice" source="ShoppingService" target="Invoice" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Uses HttpSessions" source="HttpSession" target="WebApp JSP Frontend" sourceCardinality="0..*" targetCardinality="1..*"/>
+    <UseRelation name="UsesObjectFactory" source="HttpSession" target="ObjectFactory" sourceCardinality="0..*" targetCardinality="1..1"/>
+    <UseRelation name="Sends Request" source="HttpServeletRequest" target="HttpServerelet" sourceCardinality="0..*" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="UserBasketImpl" target="UserBasket"/>
+    <UseRelation name="Creates Users" source="LoginController" target="User" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <HasRelation name="Has Role" source="User" target="Roles" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
     <UseRelation name="Stores Items in Database" source="ShoppingService" target="ItemDatabase" sourceCardinality="1..1" targetCardinality="1..*"/>
+    <UseRelation name="Creates &amp; Uses This" source="ShoppingService" target="Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Creates" source="ServiceObjectFactory" target="UserBasketImpl" sourceCardinality="1..1" targetCardinality="0..*"/>
+    <UseRelation name="CompilesToServelet" source="HttpServerelet" target="WebApp JSP Frontend" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Sends Response" source="HttpServeletResponse" target="HttpServerelet" sourceCardinality="0..*" targetCardinality="1..1"/>
+    <UseRelation name="Stores Users" source="LoginController" target="UserDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
   </ClassDiagramRelations>
 </ClassDiagram>
