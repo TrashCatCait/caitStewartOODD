@@ -23,7 +23,9 @@
             <li>Item Name: ${item.name}</li>
             <li>Price: ${item.price}</li> 
             <li>Amount Bought: ${item.quantity} (Order quantity currently seems to be bugged)</li>
-            </c:forEach>
+        </c:forEach>
+            <li>Order Total: ${orderDetails.amountDue}</li>
+            <li>Date Of Purchase: ${orderDetails.dateOfPurchase}</li>
         <h5>Order Status: ${orderDetails.status}</h5>
 
     </ul>

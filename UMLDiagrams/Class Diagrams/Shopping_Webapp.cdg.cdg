@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ClassDiagram name="Shopping_Service_Classes.cdg">
+  <ClassDiagramComponents>
+    <Class name="Item" package="" visibility="public" xPosition="710.0" yPosition="1203.0">
+      <Fields>
+        <Field name="name" type="String" visibility="private"/>
+        <Field name="UUID" type="String" visibility="private"/>
+        <Field name="count" type="Integer" visibility="private"/>
+        <Field name="itemPrice" type="Double" visibility="private"/>
+        <Field name="ID" type="Long" visibility="private"/>
+        <Field name="Type" type="String" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="WebApp JSP Frontend" package="" visibility="public" xPosition="449.0" yPosition="233.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="Invoice" package="" visibility="public" xPosition="835.0" yPosition="768.0">
+      <Fields>
+        <Field name="invoiceUUID" type="String" visibility="private"/>
+        <Field name="dateOfPurchase" type="Date" visibility="private"/>
+        <Field name="totalPrice" type="Double" visibility="private"/>
+        <Field name="purchaseItems" type="List&lt;Item&gt;" visibility="private"/>
+        <Field name="purchaser" type="User" visibility="private"/>
+        <Field name="status" type="InvoiceStatus" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="User" package="" visibility="public" xPosition="1513.0" yPosition="27.0">
+      <Fields>
+        <Field name="roles" type="Roles" visibility="private"/>
+        <Field name="uname" type="String" visibility="private"/>
+        <Field name="hashedPassword" type="String" visibility="private"/>
+        <Field name="firstName" type="String" visibility="private"/>
+        <Field name="secondName" type="String" visibility="private"/>
+        <Field name="address" type="Address" visibility="private"/>
+        <Field name="Enabled" type="Boolean" visibility="private"/>
+        <Field name="cardNumber" type="String" visibility="private"/>
+        <Field name="cardExpire" type="String" visibility="private"/>
+        <Field name="nameOnCard" type="String" visibility="private"/>
+      </Fields>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="HttpSession" package="" visibility="public" xPosition="805.0" yPosition="343.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="ObjectFactory" package="" visibility="public" xPosition="1562.0" yPosition="343.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="ServiceObjectFactory" package="" visibility="public" xPosition="1546.0" yPosition="550.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="LoginController" package="" visibility="public" xPosition="813.0" yPosition="66.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="UserBasketImpl" package="" visibility="public" xPosition="1482.0" yPosition="764.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Class name="ShoppingServiceImpl" package="" visibility="public" xPosition="1640.0" yPosition="1031.0">
+      <Fields/>
+      <Constructors/>
+      <Methods/>
+    </Class>
+    <Interface name="ShoppingService" package="" visibility="public" xPosition="255.0" yPosition="969.0">
+      <Methods>
+        <Method name="getStockedItems" returnType="List&lt;Item&gt;" visibility="public"/>
+        <Method name="purchaseItems" returnType="User" visibility="public">
+          <Argument type="List&lt;Item&gt;" name="items"/>
+          <Argument type="Double" name="total"/>
+          <Argument type="User" name="user"/>
+        </Method>
+        <Method name="removeItemById" returnType="Long" visibility="public">
+          <Argument type="Long" name="Id"/>
+        </Method>
+        <Method name="ItemExistsId" returnType="Long" visibility="public">
+          <Argument type="Long" name="id"/>
+        </Method>
+        <Method name="getItemsByString" returnType="String" visibility="public">
+          <Argument type="String" name="searchStr"/>
+        </Method>
+        <Method name="getItemById" returnType="Long" visibility="public">
+          <Argument type="Long" name="id"/>
+        </Method>
+        <Method name="addItem" returnType="Item" visibility="public">
+          <Argument type="Item" name="item"/>
+        </Method>
+        <Method name="getAviliableItems" returnType="List&lt;Item&gt;" visibility="public"/>
+      </Methods>
+    </Interface>
+    <Interface name="UserBasket" package="" visibility="public" xPosition="1094.0" yPosition="629.0">
+      <Methods>
+        <Method name="getCurrentBasketItems" returnType="List&lt;Item&gt;" visibility="public"/>
+        <Method name="addItemToBasket" returnType="Item" visibility="public">
+          <Argument type="Item" name="item"/>
+        </Method>
+        <Method name="removeItem" returnType="String" visibility="public">
+          <Argument type="String" name="itemUUID"/>
+        </Method>
+        <Method name="getTotal" returnType="double" visibility="public"/>
+      </Methods>
+    </Interface>
+    <Interface name="ItemDatabase" package="" visibility="public" xPosition="255.0" yPosition="1255.0">
+      <Methods>
+        <Method name="findItemByType" returnType="String" visibility="public">
+          <Argument type="String" name="type"/>
+        </Method>
+        <Method name="FindByName" returnType="String" visibility="public">
+          <Argument type="String" name="name"/>
+        </Method>
+      </Methods>
+    </Interface>
+    <Interface name="InvoiceDatabase" package="" visibility="public" xPosition="612.0" yPosition="646.0">
+      <Methods>
+        <Method name="FindByInvoiceNum" returnType="List&lt;Invoice&gt;" visibility="public">
+          <Argument type="String" name="UUID"/>
+        </Method>
+        <Method name="FindByUsername" returnType="List&lt;Invoice&gt;" visibility="public">
+          <Argument type="Stirng" name="Username"/>
+        </Method>
+      </Methods>
+    </Interface>
+    <Interface name="UserDatabase" package="" visibility="public" xPosition="1034.0" yPosition="175.0">
+      <Methods>
+        <Method name="FindByUserName" returnType="String" visibility="public">
+          <Argument type="String" name="username"/>
+        </Method>
+        <Method name="FIndByNames" returnType="String" visibility="public">
+          <Argument type="String" name="fname"/>
+          <Argument type="String" name="sname"/>
+        </Method>
+      </Methods>
+    </Interface>
+    <Interface name="HttpServeletRequest" package="" visibility="public" xPosition="16.0" yPosition="66.0">
+      <Methods/>
+    </Interface>
+    <Interface name="HttpServeletResponse" package="" visibility="public" xPosition="277.0" yPosition="66.0">
+      <Methods/>
+    </Interface>
+    <Enum name="Roles" package="" visibility="public" xPosition="1755.0" yPosition="75.0">
+      <Literals>
+        <Literal name="ADMIN"/>
+        <Literal name="CUSTOMER"/>
+        <Literal name="DEACTIVATED"/>
+      </Literals>
+    </Enum>
+    <Enum name="InvoiceStatus" package="" visibility="public" xPosition="1135.0" yPosition="799.0">
+      <Literals>
+        <Literal name="OUTSTANDING"/>
+        <Literal name="FUFFILED"/>
+        <Literal name="CANCELLED"/>
+      </Literals>
+    </Enum>
+    <Interface name="HttpServerelet" package="" visibility="public" xPosition="179.0" yPosition="245.0">
+      <Methods/>
+    </Interface>
+  </ClassDiagramComponents>
+  <ClassDiagramRelations>
+    <HasRelation name="Has" source="Invoice" target="InvoiceStatus" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <UseRelation name="UsesObjectFactory" source="HttpSession" target="ObjectFactory" sourceCardinality="0..*" targetCardinality="1..1"/>
+    <UseRelation name="UsesShoppingService" source="WebApp JSP Frontend" target="ShoppingService" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Stores Invoice in here" source="ShoppingService" target="InvoiceDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Uses invoices" source="HttpSession" target="InvoiceDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Creates" source="ServiceObjectFactory" target="UserBasketImpl" sourceCardinality="1..1" targetCardinality="0..*"/>
+    <UseRelation name="Sends Response" source="HttpServeletResponse" target="HttpServerelet" sourceCardinality="0..*" targetCardinality="1..1"/>
+    <HasRelation name="Has Role" source="User" target="Roles" type="Default" sourceCardinality="0..1" targetCardinality="1..1"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="UserBasketImpl" target="UserBasket"/>
+    <ImplementsRelation name="&lt;&lt;implements&gt;&gt;" source="ShoppingServiceImpl" target="ShoppingService"/>
+    <UseRelation name="Sends Request" source="HttpServeletRequest" target="HttpServerelet" sourceCardinality="0..*" targetCardinality="1..1"/>
+    <UseRelation name="Stores Users" source="LoginController" target="UserDatabase" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="UsesServicesObject" source="ObjectFactory" target="ServiceObjectFactory" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Uses login" source="HttpSession" target="LoginController" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="CompilesToServelet" source="HttpServerelet" target="WebApp JSP Frontend" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Creates &amp; Uses This" source="ShoppingService" target="Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Creates Users" source="LoginController" target="User" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Uses HttpSessions" source="HttpSession" target="WebApp JSP Frontend" sourceCardinality="0..*" targetCardinality="1..*"/>
+    <UseRelation name="Creates Invoice" source="ShoppingService" target="Invoice" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Creates" source="ServiceObjectFactory" target="ShoppingServiceImpl" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Stores Items in Database" source="ShoppingService" target="ItemDatabase" sourceCardinality="1..1" targetCardinality="1..*"/>
+  </ClassDiagramRelations>
+</ClassDiagram>

@@ -75,255 +75,6 @@ public class ServerController {
         return "redirect:/index.html";
     }
 
-    @RequestMapping(value = "/basket", method = {RequestMethod.GET, RequestMethod.POST})
-    public String Basket(@RequestParam(name = "action", required = false) String action,
-            @RequestParam(name = "itemId", required = false) String itemIdStr,
-            @RequestParam(name = "itemUUID", required = false) String uuid,
-            Model model,
-            HttpSession session) {
-        Long itemId;
-        if (itemIdStr != null) {
-            try {
-                itemId = Long.parseLong(itemIdStr);
-            } catch (Exception ex) {
-                model.addAttribute("errorMessage", "Unable to parse ID");
-                return "home";
-            }
-        }
-
-        User sessionUser = getSessionUser(session);
-        model.addAttribute("currentUser", sessionUser.getUsername());
-        model.addAttribute("sessionUser", sessionUser);
-        String message = "";
-        String errorMessage = "";
-
-        if (action != null) {
-            if (action.equals("removeItem")) {
-                userBasket.removeItem(uuid);
-            } else if (action.equals("checkout")) {
-                if (userBasket.getCurrentBasketItems().isEmpty()) {
-                    errorMessage = "Error can't checkout an empty basket";
-                } else if (sessionUser.getUserRole().equals(Roles.ANONYMOUS) || sessionUser.getUserRole().equals(Roles.DEACTIVATED)) {
-                    errorMessage = "Sorry only customers and admins are allowed to use the shopping Service";
-                } else {
-                    message = "Checking out now";
-                    if (shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser)) {
-                        userBasket = WebFactory.getNewBasket();
-                    } else {
-                        errorMessage = "An error occured at checkout. Please Make sure the item exists";
-                    }
-                }
-            }
-        }
-
-        List<Item> baksetItems = userBasket.getCurrentBasketItems();
-
-        Double totalPrice = userBasket.getTotal();
-
-        // populate model with values
-        model.addAttribute("basketItems", baksetItems);
-        model.addAttribute("message", message);
-        model.addAttribute("errorMessage", errorMessage);
-        model.addAttribute("basketTotal", totalPrice);
-        return "basket";
-    }
-
-    @RequestMapping(value = "/viewOrder", method = {RequestMethod.GET, RequestMethod.POST})
-    public String viewOrder(@RequestParam(name = "order", required = false) String idstr,
-            Model model, HttpSession session) {
-        User sessionUser = getSessionUser(session);
-
-        model.addAttribute("currentUser", sessionUser.getUsername());
-        model.addAttribute("sessionUser", sessionUser);
-        Long id;
-        try {
-            id = Long.parseLong(idstr);
-        } catch (Exception ex) {
-            model.addAttribute("errorMessage", "Unable to parse ID");
-            return "home";
-        }
-
-        Optional<Invoice> invoice = invoiceRepo.findById(id);
-
-        if (invoice.isPresent()) {
-            //Get the user name of the purchaser if it's this account or if this account is an admin let them view the order.
-            if (invoice.get().getPurchaser().getUsername().equals(sessionUser.getUsername()) || sessionUser.getUserRole().equals(Roles.ADMIN)) {
-                model.addAttribute("orderDetails", invoice.get());
-                return "vieworder";
-            } else {
-                //ekse print error
-                model.addAttribute("errorMessage", "Error trying to view an order that doesn't belong to your account and the current account is not admin. Only admin users can view others orders");
-                return "home";
-            }
-        } else {
-            model.addAttribute("errorMessage", "This order was not found please enter a real order");
-            return "home";
-        }
-    }
-
-    @RequestMapping(value = "/modifyOrder", method = {RequestMethod.GET, RequestMethod.POST})
-    public String viewOrder(@RequestParam(name = "orderId", required = false) String idstr,
-            @RequestParam(name = "orderStatus", required = false) String status,
-            Model model, HttpSession session) {
-        User sessionUser = getSessionUser(session);
-
-        model.addAttribute("currentUser", sessionUser.getUsername());
-        model.addAttribute("sessionUser", sessionUser);
-        Long id;
-
-        try {
-            id = Long.parseLong(idstr);
-        } catch (Exception ex) {
-            model.addAttribute("errorMessage", "Unable to parse ID");
-            return "home";
-        }
-
-        try {
-            Optional<Invoice> invoice = invoiceRepo.findById(id);
-            if (invoice.isPresent()) {
-                if (invoice.get().getPurchaser().getUsername().equals(sessionUser.getUsername()) || sessionUser.getUserRole().equals(Roles.ADMIN)) {
-                    invoice.get().setStatus(InvoiceStatus.valueOf(status));
-                    model.addAttribute("orderDetails", invoice.get());
-                    invoiceRepo.save(invoice.get());
-                    return "vieworder";
-                } else {
-                    model.addAttribute("errorMessage", "Sorry you aren't allowed to view others orders if your not an admin");
-                    return "home";
-                }
-            } else {
-                model.addAttribute("errorMessage", "Error this order doesn't seem to exist");
-                return "home";
-            }
-        } catch (Exception ex) {
-            model.addAttribute("errorMessage", "Unable to parse status");
-            return "home";
-        }
-
-    }
-
-    @RequestMapping(value = "/updateItem", method = {RequestMethod.GET, RequestMethod.POST})
-    public String UpdateItems(@RequestParam(value = "action", required = false) String action,
-            @RequestParam(value = "itemId", required = false) String itemIdStr,
-            @RequestParam(value = "itemName", required = false) String itemName,
-            @RequestParam(value = "itemQuantity", required = false) String itemQuantityStr,
-            @RequestParam(value = "itemPrice", required = false) String itemPriceStr,
-            @RequestParam(value = "itemType", required = false) String itemType,
-            Model model, HttpSession session) {
-        User sessionUser = getSessionUser(session);
-        model.addAttribute("sessionUser", sessionUser);
-        model.addAttribute("currentUser", sessionUser.getUsername());
-
-        Long itemId;
-        Integer itemQuantity;
-        Double itemPrice;
-        Item item;
-        if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
-            if (action != null) {
-                try {
-                    itemId = Long.parseLong(itemIdStr);
-                    if (action.equals("findItem")) {
-                        item = shoppingService.ItemAddedToBasket(itemId);
-                        if (item == null) {
-                            model.addAttribute("errorMessage", "Item not found");
-                        } else {
-                            model.addAttribute("newItem", item);
-                        }
-                    } else if (action.equals("updateItem")) {
-                        item = shoppingService.ItemAddedToBasket(itemId);
-                        if (item == null) {
-                            model.addAttribute("errorMessage", "Item not found");
-                            return "home";
-                        } else {
-                            try {
-                                itemPrice = Double.parseDouble(itemPriceStr);
-                                itemQuantity = Integer.parseInt(itemQuantityStr);
-                                item.setName(itemName);
-                                item.setPrice(itemPrice);
-                                item.setQuantity(itemQuantity);
-                                item.setType(itemType);
-                                shoppingService.addItem(item);
-                                model.addAttribute("message", "item updated");
-                            } catch (Exception ex) {
-                                LOG.warn(ex);
-                                model.addAttribute("errorMessage", "Unable to parse item Quantity: " + itemQuantityStr + " Or item Price" + itemPriceStr);
-
-                            }
-                        }
-                    }
-                } catch (Exception ex) {
-                    LOG.warn(ex);
-                    model.addAttribute("errorMessage", "Unable to parse item id: " + itemIdStr);
-                    return "home";
-                }
-
-            }
-
-            model.addAttribute("items", shoppingService.getAviliableItems());
-            return "updateitems";
-        } else {
-            model.addAttribute("errorMessage", "You must be an admin to update items");
-            return "home";
-        }
-    }
-
-    @RequestMapping(value = "/orders", method = {RequestMethod.GET, RequestMethod.POST})
-    public String orders(Model model, HttpSession session,
-            @RequestParam(value = "searchStr", required = false) String searchStr,
-            @RequestParam(value = "action", required = false) String action) {
-        User sessionUser = getSessionUser(session);
-
-        model.addAttribute("currentUser", sessionUser.getUsername());
-        model.addAttribute("sessionUser", sessionUser);
-        //Function only for admins
-        if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
-
-            List<Invoice> invoices = invoiceRepo.findAll();
-
-            if (action != null) {
-                if (searchStr == null) {
-                    model.addAttribute("errorMessage", "Please enter a username to search by");
-                } else if (action.equals("search")) {
-                    List<Invoice> userInvoices = invoiceRepo.FindByUsername(searchStr);
-                    List<Invoice> uuidInvoices = invoiceRepo.FindByInoviceNum(searchStr);
-                    invoices = Stream.of(userInvoices, uuidInvoices).flatMap(Collection::stream).collect(Collectors.toList());
-                } else {
-                    LOG.warn("Unknown Action on orders page actionName: " + action);
-                    model.addAttribute("errorMessage", "Unknown action used on Orders page please use a known action as action: " + action + " isn't valid for this page");
-                }
-            }
-
-            model.addAttribute("orders", invoices);
-
-            return "orders";
-        } else {
-            return "home";
-        }
-    }
-
-    @RequestMapping(value = "/myorders", method = {RequestMethod.GET, RequestMethod.POST})
-    public String myOrders(@RequestParam(name = "user", required = false) String username,
-            Model model, HttpSession session) {
-        try {
-            User sessionUser = getSessionUser(session);
-
-            model.addAttribute("currentUser", sessionUser.getUsername());
-            model.addAttribute("sessionUser", sessionUser);
-
-            List<Invoice> invoices = invoiceRepo.FindByUsername(sessionUser.getUsername());
-            model.addAttribute("orders", invoices);
-            if (!username.equals(sessionUser.getUsername()) && !sessionUser.getUserRole().equals(Roles.ADMIN)) {
-                model.addAttribute("errorMessage", "Error only the owner of " + username + " Account can view their orders, The current account is " + sessionUser.getUsername());
-                return "home";
-            }
-
-            return "myorders";
-        } catch (Exception ex) {
-            LOG.warn(ex);
-            model.addAttribute("errorMessage", ex.getMessage());
-            return "home";
-        }
-    }
-
     @RequestMapping(value = "/home", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvhome(@RequestParam(name = "action", required = false) String action,
             @RequestParam(name = "itemId", required = false) String itemIdStr,
@@ -355,7 +106,7 @@ public class ServerController {
 
             if (action.equals("addToCart")) {
                 if (itemId != null) {
-                    Item item = shoppingService.ItemAddedToBasket(itemId);
+                    Item item = shoppingService.getItemById(itemId);
                     Item newitem = new Item();
                     newitem.setId(item.getId());
                     newitem.setName(item.getName());
@@ -385,7 +136,7 @@ public class ServerController {
     }
 
     @RequestMapping(value = "/about", method = {RequestMethod.GET, RequestMethod.POST})
-    public String aboutCart(Model model, HttpSession session) {
+    public String about(Model model, HttpSession session) {
 
         // get sessionUser from session
         User sessionUser = getSessionUser(session);
@@ -515,6 +266,256 @@ public class ServerController {
         // used to set tab selected
         model.addAttribute("selectedPage", "contact");
         return "contact";
+    }
+    
+        @RequestMapping(value = "/basket", method = {RequestMethod.GET, RequestMethod.POST})
+    public String Basket(@RequestParam(name = "action", required = false) String action,
+            @RequestParam(name = "itemId", required = false) String itemIdStr,
+            @RequestParam(name = "itemUUID", required = false) String uuid,
+            Model model,
+            HttpSession session) {
+        Long itemId;
+        if (itemIdStr != null) {
+            try {
+                itemId = Long.parseLong(itemIdStr);
+            } catch (Exception ex) {
+                model.addAttribute("errorMessage", "Unable to parse ID");
+                return "home";
+            }
+        }
+
+        User sessionUser = getSessionUser(session);
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        model.addAttribute("sessionUser", sessionUser);
+        String message = "";
+        String errorMessage = "";
+
+        if (action != null) {
+            if (action.equals("removeItem")) {
+                userBasket.removeItem(uuid);
+            } else if (action.equals("checkout")) {
+                if (userBasket.getCurrentBasketItems().isEmpty()) {
+                    errorMessage = "Error can't checkout an empty basket";
+                } else if (sessionUser.getUserRole().equals(Roles.ANONYMOUS) || sessionUser.getUserRole().equals(Roles.DEACTIVATED)) {
+                    errorMessage = "Sorry only customers and admins are allowed to use the shopping Service";
+                } else {
+                    message = "Checking out now";
+                    if (shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser)) {
+                        //Allocate a new basket for the User
+                        userBasket = WebFactory.getNewBasket();
+                    } else {
+                        errorMessage = "An error occured at checkout. Please Make sure the item exists";
+                    }
+                }
+            }
+        }
+
+        List<Item> baksetItems = userBasket.getCurrentBasketItems();
+
+        Double totalPrice = userBasket.getTotal();
+
+        // populate model with values
+        model.addAttribute("basketItems", baksetItems);
+        model.addAttribute("message", message);
+        model.addAttribute("errorMessage", errorMessage);
+        model.addAttribute("basketTotal", totalPrice);
+        return "basket";
+    }
+
+    @RequestMapping(value = "/viewOrder", method = {RequestMethod.GET, RequestMethod.POST})
+    public String viewOrder(@RequestParam(name = "order", required = false) String idstr,
+            Model model, HttpSession session) {
+        User sessionUser = getSessionUser(session);
+
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        model.addAttribute("sessionUser", sessionUser);
+        Long id;
+        try {
+            id = Long.parseLong(idstr);
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Unable to parse ID");
+            return "home";
+        }
+
+        Optional<Invoice> invoice = invoiceRepo.findById(id);
+
+        if (invoice.isPresent()) {
+            //Get the user name of the purchaser if it's this account or if this account is an admin let them view the order.
+            if (invoice.get().getPurchaser().getUsername().equals(sessionUser.getUsername()) || sessionUser.getUserRole().equals(Roles.ADMIN)) {
+                model.addAttribute("orderDetails", invoice.get());
+                return "vieworder";
+            } else {
+                //ekse print error
+                model.addAttribute("errorMessage", "Error trying to view an order that doesn't belong to your account and the current account is not admin. Only admin users can view others orders");
+                return "home";
+            }
+        } else {
+            model.addAttribute("errorMessage", "This order was not found please enter a real order");
+            return "home";
+        }
+    }
+
+    @RequestMapping(value = "/modifyOrder", method = {RequestMethod.GET, RequestMethod.POST})
+    public String viewOrder(@RequestParam(name = "orderId", required = false) String idstr,
+            @RequestParam(name = "orderStatus", required = false) String status,
+            Model model, HttpSession session) {
+        User sessionUser = getSessionUser(session);
+
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        model.addAttribute("sessionUser", sessionUser);
+        Long id;
+
+        try {
+            id = Long.parseLong(idstr);
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Unable to parse ID");
+            return "home";
+        }
+
+        try {
+            Optional<Invoice> invoice = invoiceRepo.findById(id);
+            if (invoice.isPresent()) {
+                if (invoice.get().getPurchaser().getUsername().equals(sessionUser.getUsername()) || sessionUser.getUserRole().equals(Roles.ADMIN)) {
+                    invoice.get().setStatus(InvoiceStatus.valueOf(status));
+                    model.addAttribute("orderDetails", invoice.get());
+                    invoiceRepo.save(invoice.get());
+                    return "vieworder";
+                } else {
+                    model.addAttribute("errorMessage", "Sorry you aren't allowed to view others orders if your not an admin");
+                    return "home";
+                }
+            } else {
+                model.addAttribute("errorMessage", "Error this order doesn't seem to exist");
+                return "home";
+            }
+        } catch (Exception ex) {
+            model.addAttribute("errorMessage", "Unable to parse status");
+            return "home";
+        }
+
+    }
+
+    @RequestMapping(value = "/updateItem", method = {RequestMethod.GET, RequestMethod.POST})
+    public String UpdateItems(@RequestParam(value = "action", required = false) String action,
+            @RequestParam(value = "itemId", required = false) String itemIdStr,
+            @RequestParam(value = "itemName", required = false) String itemName,
+            @RequestParam(value = "itemQuantity", required = false) String itemQuantityStr,
+            @RequestParam(value = "itemPrice", required = false) String itemPriceStr,
+            @RequestParam(value = "itemType", required = false) String itemType,
+            Model model, HttpSession session) {
+        User sessionUser = getSessionUser(session);
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("currentUser", sessionUser.getUsername());
+
+        Long itemId;
+        Integer itemQuantity;
+        Double itemPrice;
+        Item item;
+        if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
+            if (action != null) {
+                try {
+                    itemId = Long.parseLong(itemIdStr);
+                    if (action.equals("findItem")) {
+                        item = shoppingService.getItemById(itemId);
+                        if (item == null) {
+                            model.addAttribute("errorMessage", "Item not found");
+                        } else {
+                            model.addAttribute("newItem", item);
+                        }
+                    } else if (action.equals("updateItem")) {
+                        item = shoppingService.getItemById(itemId);
+                        if (item == null) {
+                            model.addAttribute("errorMessage", "Item not found");
+                            return "home";
+                        } else {
+                            try {
+                                itemPrice = Double.parseDouble(itemPriceStr);
+                                itemQuantity = Integer.parseInt(itemQuantityStr);
+                                item.setName(itemName);
+                                item.setPrice(itemPrice);
+                                item.setQuantity(itemQuantity);
+                                item.setType(itemType);
+                                shoppingService.addItem(item);
+                                model.addAttribute("message", "item updated");
+                            } catch (Exception ex) {
+                                LOG.warn(ex);
+                                model.addAttribute("errorMessage", "Unable to parse item Quantity: " + itemQuantityStr + " Or item Price" + itemPriceStr);
+
+                            }
+                        }
+                    }
+                } catch (Exception ex) {
+                    LOG.warn(ex);
+                    model.addAttribute("errorMessage", "Unable to parse item id: " + itemIdStr);
+                    return "home";
+                }
+
+            }
+
+            model.addAttribute("items", shoppingService.getAviliableItems());
+            return "updateitems";
+        } else {
+            model.addAttribute("errorMessage", "You must be an admin to update items");
+            return "home";
+        }
+    }
+
+    @RequestMapping(value = "/orders", method = {RequestMethod.GET, RequestMethod.POST})
+    public String orders(Model model, HttpSession session,
+            @RequestParam(value = "searchStr", required = false) String searchStr,
+            @RequestParam(value = "action", required = false) String action) {
+        User sessionUser = getSessionUser(session);
+
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        model.addAttribute("sessionUser", sessionUser);
+        //Function only for admins
+        if (sessionUser.getUserRole().equals(Roles.ADMIN)) {
+
+            List<Invoice> invoices = invoiceRepo.findAll();
+
+            if (action != null) {
+                if (searchStr == null) {
+                    model.addAttribute("errorMessage", "Please enter a username to search by");
+                } else if (action.equals("search")) {
+                    List<Invoice> userInvoices = invoiceRepo.FindByUsername(searchStr);
+                    List<Invoice> uuidInvoices = invoiceRepo.FindByInoviceNum(searchStr);
+                    invoices = Stream.of(userInvoices, uuidInvoices).flatMap(Collection::stream).collect(Collectors.toList());
+                } else {
+                    LOG.warn("Unknown Action on orders page actionName: " + action);
+                    model.addAttribute("errorMessage", "Unknown action used on Orders page please use a known action as action: " + action + " isn't valid for this page");
+                }
+            }
+
+            model.addAttribute("orders", invoices);
+
+            return "orders";
+        } else {
+            return "home";
+        }
+    }
+
+    @RequestMapping(value = "/myorders", method = {RequestMethod.GET, RequestMethod.POST})
+    public String myOrders(@RequestParam(name = "user", required = false) String username,
+            Model model, HttpSession session) {
+        try {
+            User sessionUser = getSessionUser(session);
+
+            model.addAttribute("currentUser", sessionUser.getUsername());
+            model.addAttribute("sessionUser", sessionUser);
+
+            List<Invoice> invoices = invoiceRepo.FindByUsername(sessionUser.getUsername());
+            model.addAttribute("orders", invoices);
+            if (!username.equals(sessionUser.getUsername()) && !sessionUser.getUserRole().equals(Roles.ADMIN)) {
+                model.addAttribute("errorMessage", "Error only the owner of " + username + " Account can view their orders, The current account is " + sessionUser.getUsername());
+                return "home";
+            }
+
+            return "myorders";
+        } catch (Exception ex) {
+            LOG.warn(ex);
+            model.addAttribute("errorMessage", ex.getMessage());
+            return "home";
+        }
     }
 
     @ExceptionHandler(Exception.class)

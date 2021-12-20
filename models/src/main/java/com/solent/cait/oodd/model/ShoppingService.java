@@ -24,9 +24,7 @@ public interface ShoppingService {
 
     Boolean ItemExistsId(Long id);
 
-    Item ItemAddedToBasket(Long id);
-
-    void ItemRemovedToBasket(Long id);
+    Item getItemById(Long id);
 
     List<Item> getItemsByString(String searchStr);
 }

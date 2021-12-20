@@ -74,14 +74,16 @@ public class ShoppingServiceImpl implements ShoppingService {
     }
 
 
-
-@Override
-public void removeItemById(Long Id) {
+    /*
+    * Deletes Item from the repo using the Item's ID to do so
+    */
+    @Override
+    public void removeItemById(Long Id) {
         itemRepo.deleteById(Id); 
     }
     
     @Override
-public Boolean ItemExistsId(Long id) {
+    public Boolean ItemExistsId(Long id) {
         return itemRepo.existsById(id);
     }
 
@@ -98,7 +100,7 @@ public Boolean ItemExistsId(Long id) {
     }
 
     @Override
-public Item ItemAddedToBasket(Long id) {
+    public Item getItemById(Long id) {
         Optional<Item> item = itemRepo.findById(id);
         if(item.isPresent()){
             itemRepo.save(item.get());
@@ -108,11 +110,7 @@ public Item ItemAddedToBasket(Long id) {
     }
     
     @Override
-public void ItemRemovedToBasket(Long id) {
-    }
-    
-    @Override
-public void addItem(Item item) {
+    public void addItem(Item item) {
         itemRepo.save(item);
     }
 
@@ -121,7 +119,7 @@ public void addItem(Item item) {
     }
 
     @Override
-public List<Item> getAviliableItems() {
+    public List<Item> getAviliableItems() {
         return itemRepo.findAll();
     }
 

@@ -41,6 +41,10 @@ public class Invoice {
     
     private InvoiceStatus status;
 
+    public Invoice(){
+        
+    }
+    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {

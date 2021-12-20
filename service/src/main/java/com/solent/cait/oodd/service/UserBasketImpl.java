@@ -31,7 +31,6 @@ public class UserBasketImpl implements UserBasket {
 
     @Override
     public void addItemToBasket(Item item) {
-        // ANSWER
         boolean itemExists = false;
         for (String itemUUID : itemMap.keySet()) {
             Item shoppingCartItem = itemMap.get(itemUUID);
@@ -51,15 +50,11 @@ public class UserBasketImpl implements UserBasket {
 
     @Override
     public void removeItem(String itemUUID) {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        // ANSWER
         itemMap.remove(itemUUID);
     }
 
     @Override
     public double getTotal() {
-        //throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-        // ANSWER
         double total = 0;
 
         for (String itemUUID : itemMap.keySet()) {
