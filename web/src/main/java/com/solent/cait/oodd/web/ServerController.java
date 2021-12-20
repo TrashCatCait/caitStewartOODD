@@ -67,14 +67,9 @@ public class ServerController {
     //Set up root of index
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvroot(Model model) {
-        return "redirect:/index.html";
+        return "redirect:/home";
     }
-
-    @RequestMapping(value = "/index", method = {RequestMethod.GET, RequestMethod.POST})
-    public String srvindex(Model model) {
-        return "redirect:/index.html";
-    }
-
+    
     @RequestMapping(value = "/home", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvhome(@RequestParam(name = "action", required = false) String action,
             @RequestParam(name = "itemId", required = false) String itemIdStr,
