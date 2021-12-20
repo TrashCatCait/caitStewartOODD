@@ -12,7 +12,7 @@ import com.solent.cait.oodd.service.ServiceObjectFactory;
 
 /**
  *
- * @author cgallen
+ * @author caitlyn
  */
 public class WebFactory {
 
