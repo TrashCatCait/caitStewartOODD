@@ -14,8 +14,8 @@
     <body>
         <div style="color:red;">${errorMessage}</div>
         <div style="color:green;">${message}</div>
-        <p>Notice changing of User names is currently not supported</p>
         <h4>${user.username} Details:</h4>
+        <p>Notice changing of User names is currently not supported</p>
         <form action="./modifyUser" method="POST">
             <input type="hidden" name="action" value="modifyUser">
             <input type="hidden" name="username" value="${user.username}"/>

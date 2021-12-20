@@ -17,13 +17,13 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="">
         <meta name="author" content="">
+        <link href="./resources/CSS/basiccss.css" rel="stylesheet">
 
-        <title>Navbar Template for Bootstrap</title>
+        <title>Shopping Webapp</title>
     </head>
     <body>
 
             <nav class="navbar">
-                <div>
                     <ul class="nav-list"> 
                         <li class="list-link"><a href="./home">Home</a></li>
                         <li class="list-link"><a href="./about">About</a></li> 
@@ -45,7 +45,6 @@
                         </c:if>
                         <li class="list-link"><a href="./basket">My Basket</a></li> 
                     </ul>
-                </div>
             </nav>
 
 
