@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.solent.cait.oodd.bank;
+package com.solent.cait.oodd.bank.service;
 
 import java.util.logging.Level;
 
@@ -25,15 +25,19 @@ import org.glassfish.jersey.client.authentication.HttpAuthenticationFeature;
 import org.glassfish.jersey.jackson.internal.jackson.jaxrs.json.JacksonJsonProvider;
 import org.glassfish.jersey.logging.LoggingFeature;
 
-import com.solent.cait.oodd.dto.TransactionReply;
-import com.solent.cait.oodd.dto.TransactionRequest;
-import com.solent.cait.oodd.dto.CreditCard;
-import com.solent.cait.oodd.model.BankClient;
+import com.solent.cait.oodd.bank.dto.TransactionReply;
+import com.solent.cait.oodd.bank.dto.TransactionRequest;
+import com.solent.cait.oodd.bank.dto.CreditCard;
+import com.solent.cait.oodd.bank.model.BankClient;
+import javax.inject.Scope;
+import org.jvnet.hk2.annotations.Service;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 
 /**
  *
  * @author caitlyn
  */
+
 public class BankClientImpl implements BankClient {
 
     final static Logger LOG = LogManager.getLogger(BankClientImpl.class);
@@ -47,7 +51,7 @@ public class BankClientImpl implements BankClient {
     @Override
     public TransactionReply transferMoney(CreditCard fromCard, CreditCard toCard, Double amount) {
         LOG.debug("transferMoney called: ");
-
+        
         // sets up logging for the client       
         Client client = ClientBuilder.newClient(new ClientConfig().register(
                 new LoggingFeature(java.util.logging.Logger.getLogger(LoggingFeature.DEFAULT_LOGGER_NAME),

@@ -18,6 +18,7 @@ import com.solent.cait.oodd.dao.UserRepository;
 import com.solent.cait.oodd.dao.InvoiceRepository;
 import com.solent.cait.oodd.dto.Invoice;
 import com.solent.cait.oodd.dto.InvoiceStatus;
+import com.solent.cait.oodd.bank.dto.CreditCard;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,10 +30,12 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import com.solent.cait.oodd.service.CardChecker;
 
 /**
  *
  * @author caitlyn
+ * Class to control the server routing for the main shopping application 
  */
 @Controller
 @RequestMapping("/")
@@ -69,7 +72,7 @@ public class ServerController {
     public String srvroot(Model model) {
         return "redirect:/home";
     }
-    
+
     @RequestMapping(value = "/home", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvhome(@RequestParam(name = "action", required = false) String action,
             @RequestParam(name = "itemId", required = false) String itemIdStr,
@@ -262,8 +265,82 @@ public class ServerController {
         model.addAttribute("selectedPage", "contact");
         return "contact";
     }
-    
-        @RequestMapping(value = "/basket", method = {RequestMethod.GET, RequestMethod.POST})
+
+    @RequestMapping(value = "/checkout", method = {RequestMethod.GET, RequestMethod.POST})
+    public String Checkout(@RequestParam(name = "action", required = false) String action,
+            @RequestParam(name = "cvv", required = false) String cvv,
+            @RequestParam(name = "cardNum", required = false) String cardNum,
+            @RequestParam(name = "cardExpire", required = false) String cardExpire,
+            @RequestParam(name = "nameOnCard", required = false) String nameOnCard,
+            Model model, HttpSession session) {
+
+        User sessionUser = getSessionUser(session);
+        model.addAttribute("sessionUser", sessionUser);
+        model.addAttribute("currentUser", sessionUser.getUsername());
+        model.addAttribute("user", sessionUser);
+        
+        if(sessionUser.getUserRole().equals(Roles.ANONYMOUS)) {
+            model.addAttribute("errorMessage", "Sorry this page is only for customers");
+            return "home";
+        }
+        LOG.info("Checkout called");
+        CardChecker checker = new CardChecker();
+        /*Very Basic Credit Card Checker*/
+        if (action != null) {
+            if (action.equals("checkout")) {
+                if(cardNum == null) {
+                    model.addAttribute("errorMessage", "Blank Card Number");
+                    return "checkout";
+                }
+                if(cvv == null) {
+                    model.addAttribute("errorMessage", "Blank Cvv");
+                    return "checkout";
+                }
+                if(cardExpire == null) {
+                    model.addAttribute("errorMessage", "Blank Expire date");
+                    return "checkout";
+                }
+                if(nameOnCard == null || nameOnCard.length() == 0) {
+                    model.addAttribute("errorMessage", "Blank name on card");
+                    return "checkout";
+                }
+                if (!checker.isValidCard(cardNum)) {
+                    model.addAttribute("errorMessage", "Error Card number invaild please make sure your card is a valid VISA CARD");
+                    return "checkout";
+                }
+                CreditCard card = new CreditCard();
+                if (cardNum.length() != 16) {
+                    model.addAttribute("errorMessage", "Error card number to short");
+                    return "checkout";
+                }
+                if (!(checker.checkCVV(cvv))) {
+                    model.addAttribute("errorMessage", "Invalid CVV");
+                    return "checkout";
+                }
+                //The only cards I can find lay this out like 03/99 so five chars
+                if (!(checker.checkExpire(cardExpire))) {
+                    model.addAttribute("errorMessage", "Invalid card Data");
+                    return "checkout";
+                }
+                CreditCard userCard = new CreditCard();
+                userCard.setCardnumber(cardNum);
+                userCard.setCvv(cvv);
+                userCard.setEndDate(cardExpire);
+                userCard.setName(nameOnCard);
+                userCard.setIssueNumber("01");
+                shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser, userCard);
+                LOG.info(userCard);
+                    userBasket = WebFactory.getNewBasket();
+                    model.addAttribute("message", "Checkout Successful");
+                    return "home";
+
+
+            }
+        }
+        return "checkout";
+    }
+
+    @RequestMapping(value = "/basket", method = {RequestMethod.GET, RequestMethod.POST})
     public String Basket(@RequestParam(name = "action", required = false) String action,
             @RequestParam(name = "itemId", required = false) String itemIdStr,
             @RequestParam(name = "itemUUID", required = false) String uuid,
@@ -288,20 +365,6 @@ public class ServerController {
         if (action != null) {
             if (action.equals("removeItem")) {
                 userBasket.removeItem(uuid);
-            } else if (action.equals("checkout")) {
-                if (userBasket.getCurrentBasketItems().isEmpty()) {
-                    errorMessage = "Error can't checkout an empty basket";
-                } else if (sessionUser.getUserRole().equals(Roles.ANONYMOUS) || sessionUser.getUserRole().equals(Roles.DEACTIVATED)) {
-                    errorMessage = "Sorry only customers and admins are allowed to use the shopping Service";
-                } else {
-                    message = "Checking out now";
-                    if (shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser)) {
-                        //Allocate a new basket for the User
-                        userBasket = WebFactory.getNewBasket();
-                    } else {
-                        errorMessage = "An error occured at checkout. Please Make sure the item exists";
-                    }
-                }
             }
         }
 
@@ -517,7 +580,12 @@ public class ServerController {
     public String myExceptionHandler(final Exception e, Model model, HttpServletRequest request) {
         //logger.error(strStackTrace); // send to logger first
         LOG.warn(e);
-        model.addAttribute("error", e.getCause());
+        LOG.warn(e.getMessage());
+        LOG.warn(e.getCause());
+        LOG.warn(e.getClass());
+        LOG.warn(e.getStackTrace());
+        LOG.warn(e.getLocalizedMessage());
+        model.addAttribute("error", e);
         return "error"; // default friendly exception message for sessionUser
     }
 

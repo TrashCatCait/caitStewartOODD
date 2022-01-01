@@ -1,8 +1,8 @@
-package com.solent.cait.oodd.dto;
+package com.solent.cait.oodd.bank.dto;
 
 import javax.persistence.Embeddable;
 import javax.persistence.Transient;
-import com.solent.cait.oodd.security.PasswordUtils;
+import com.solent.cait.oodd.bank.security.PasswordUtils;
 
 @Embeddable
 public class AccountHolder {

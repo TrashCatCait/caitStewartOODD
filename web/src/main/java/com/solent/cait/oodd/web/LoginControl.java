@@ -21,6 +21,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 /**
  *
  * @author caitlyn
+ * Class to control the server routing for the log in control of the application
+ *
  */
 @Controller
 @RequestMapping("/")

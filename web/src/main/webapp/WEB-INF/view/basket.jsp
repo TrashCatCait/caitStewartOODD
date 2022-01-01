@@ -28,10 +28,8 @@
         </c:forEach>
         <h3>Total Price: £${basketTotal}</h3>
 
-        <form action="./basket" method="POST">
-            <input type="hidden" name="action" value="checkout">
-            <button type="submit">Checkout</button>
-        </form>
+
+        <a href="checkout"><button type="submit">Checkout</button></a>
     </body>
 
 

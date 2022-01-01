@@ -61,7 +61,9 @@ public class PopulateDatabaseOnStart {
         defaultUser.setFirstName("default user");
         defaultUser.setPassword(DEFAULT_USER_PASSWORD);
         defaultUser.setUserRole(Roles.CUSTOMER);
-
+        defaultUser.setCardExpire("03/25");
+        defaultUser.setCardNumber("4259843967067284");
+        defaultUser.setNameOnCard("Default User");
         users = userRepository.findByUsername(DEFAULT_USER_USERNAME);
         if (users.isEmpty()) {
             userRepository.save(defaultUser);

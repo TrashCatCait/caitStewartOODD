@@ -1,6 +1,6 @@
-package com.solent.cait.oodd.dto;
+package com.solent.cait.oodd.bank.dto;
 
-import com.solent.cait.oodd.dto.Account;
+import com.solent.cait.oodd.bank.dto.Account;
 import java.util.Date;
 import java.util.UUID;
 import javax.persistence.Entity;

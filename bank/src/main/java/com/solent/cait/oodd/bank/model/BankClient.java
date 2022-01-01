@@ -1,7 +1,7 @@
-package com.solent.cait.oodd.model;
+package com.solent.cait.oodd.bank.model;
 
-import com.solent.cait.oodd.dto.CreditCard;
-import com.solent.cait.oodd.dto.TransactionReply;
+import com.solent.cait.oodd.bank.dto.CreditCard;
+import com.solent.cait.oodd.bank.dto.TransactionReply;
 
 public interface BankClient {
 

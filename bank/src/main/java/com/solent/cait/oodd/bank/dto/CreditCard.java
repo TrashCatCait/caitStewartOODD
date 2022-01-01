@@ -1,4 +1,4 @@
-package com.solent.cait.oodd.dto;
+package com.solent.cait.oodd.bank.dto;
 
 import javax.persistence.Embeddable;
 

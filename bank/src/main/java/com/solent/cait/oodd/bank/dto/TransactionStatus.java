@@ -1,4 +1,4 @@
-package com.solent.cait.oodd.dto;
+package com.solent.cait.oodd.bank.dto;
 
 public enum TransactionStatus {
 

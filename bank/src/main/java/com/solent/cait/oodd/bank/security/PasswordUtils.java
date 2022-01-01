@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.solent.cait.oodd.security;
+package com.solent.cait.oodd.bank.security;
 
 import org.mindrot.jbcrypt.BCrypt;
 

@@ -7,6 +7,8 @@ package com.solent.cait.oodd.model;
 import com.solent.cait.oodd.dto.Item;
 import com.solent.cait.oodd.dto.User;
 import java.util.List;
+import com.solent.cait.oodd.bank.dto.CreditCard;
+
 
 /**
  *
@@ -18,7 +20,7 @@ public interface ShoppingService {
 
     void addItem(Item item);
 
-    Boolean purchaseItems(List<Item> items, Double total, User user);
+    Boolean purchaseItems(List<Item> items, Double total, User user, CreditCard purchaseCard);
 
     void removeItemById(Long Id);
 

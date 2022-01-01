@@ -1,4 +1,4 @@
-package com.solent.cait.oodd.dto;
+package com.solent.cait.oodd.bank.dto;
 
 import java.util.Date;
 
@@ -17,7 +17,7 @@ public class TransactionReply {
 
     private String transactionId;
 
-    private Date transactionDate;
+    private Date timestamp;
     
     private Double amount;
 
@@ -69,12 +69,12 @@ public class TransactionReply {
         this.transactionId = transactionId;
     }
 
-    public Date getTransactionDate() {
-        return transactionDate;
+    public Date getTimestamp() {
+        return timestamp;
     }
 
-    public void setTransactionDate(Date transactionDate) {
-        this.transactionDate = transactionDate;
+    public void setTimestamp(Date timestamp) {
+        this.timestamp = timestamp;
     }
 
     public Double getAmount() {
@@ -87,7 +87,7 @@ public class TransactionReply {
 
     @Override
     public String toString() {
-        return "TransactionReplyMessage{" + "code=" + code + ", message=" + message + ", status=" + status + ", fromCardNo=" + fromCardNo + ", toCardNo=" + toCardNo + ", transactionId=" + transactionId + ", transactionDate=" + transactionDate + ", amount=" + amount + '}';
+        return "TransactionReplyMessage{" + "code=" + code + ", message=" + message + ", status=" + status + ", fromCardNo=" + fromCardNo + ", toCardNo=" + toCardNo + ", transactionId=" + transactionId + ", transactionDate=" + timestamp + ", amount=" + amount + '}';
     }
 
 

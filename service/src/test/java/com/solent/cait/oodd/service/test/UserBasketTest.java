@@ -52,13 +52,27 @@ public class UserBasketTest {
         
         assertEquals(1, basket.getCurrentBasketItems().size());
         
-        //Check get total works 
-        assertEquals(100.00, basket.getTotal(), 0.01);
         
         basket.removeItem(newItem.getUuid());
         
         assertEquals(0, basket.getCurrentBasketItems().size());
 
+    }
+    
+    @Test
+    public void testGetTotal() {
+        List<Item> items = basket.getCurrentBasketItems();
+        Item newItem = new Item();
+        newItem.setName("TestItem");
+        newItem.setPrice(100.00);
+        newItem.setQuantity(1);
+        newItem.setType("ItemType");
+        newItem.setUuid(UUID.randomUUID().toString());
+        
+        basket.addItemToBasket(newItem); 
+
+        //Check get total works 
+        assertEquals(100.00, basket.getTotal(), 0.01);
     }
     
 }

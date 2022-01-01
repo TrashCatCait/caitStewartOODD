@@ -1,4 +1,4 @@
-package com.solent.cait.oodd.dto;
+package com.solent.cait.oodd.bank.dto;
 
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
@@ -6,8 +6,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
-import com.solent.cait.oodd.dto.CreditCard;
-import com.solent.cait.oodd.dto.AccountHolder;
+import com.solent.cait.oodd.bank.dto.CreditCard;
+import com.solent.cait.oodd.bank.dto.AccountHolder;
 
 @Entity
 public class Account {
