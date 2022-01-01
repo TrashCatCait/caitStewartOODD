@@ -66,8 +66,11 @@ public class InvoiceRepoTest {
         invoiceRepo.deleteAll();
         List<PurchasedItem> testItems = new ArrayList();
         PurchasedItem pitem = new PurchasedItem();
-        pitem.setItem(item1);
-        pitem.setCount(11);
+        pitem.setPrice(100.00);
+        pitem.setName("TestItem");
+        pitem.setQuantity(1);
+        pitem.setType("TestType");
+        pitem.setUuid(UUID.randomUUID().toString());
         testItems.add(pitem);
 
         Invoice invoice = new Invoice();

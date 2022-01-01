@@ -4,6 +4,7 @@
  */
 package com.solent.cait.oodd.dto;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -25,10 +26,13 @@ import javax.persistence.OneToOne;
 public class PurchasedItem {
     
     private Long id = (long) 0;
-    private Item item;
-    private int count;
+    private String name = null;
+    private String uuid=null;
+    private Integer count = 0;
+    private Double itemPrice = 0.0;
+    private String type = null;    
     
-    /**
+     /**
      * 
      * @return 
      */
@@ -45,37 +49,93 @@ public class PurchasedItem {
     public void setId(Long id) {
         this.id = id;
     }
+
+    /**
+     * 
+     * @return 
+     */
+    public String getUuid() {
+        return uuid;
+    }
+
+    /**
+     * 
+     * @param uuid 
+     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public String getName() {
+        return name;
+    }
+
+    /**
+     * 
+     * @param name 
+     */
+    public void setName(String name) {
+        this.name = name;
+    }
     
     /**
      * 
      * @return 
      */
-    public int getCount() {
+    public Integer getQuantity() {
         return count;
     }
-    
+
     /**
      * 
      * @param count 
      */
-    public void setCount(int count) {
+    public void setQuantity(Integer count) {
         this.count = count;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    public Double getPrice() {
+        return itemPrice;
+    }
+
+    /**
+     * 
+     * @param itemPrice 
+     */
+    public void setPrice(Double itemPrice) {
+        this.itemPrice = itemPrice;
     }
     
     /**
      * 
      * @return 
      */
-    @OneToOne
-    public Item getItem() {
-        return item;
+    public String getType() {
+        return type;
     }
     
     /**
      * 
-     * @param item 
+     * @param type 
      */
-    public void setItem(Item item) {
-        this.item = item;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    /**
+     * 
+     * @return 
+     */
+    @Override
+    public String toString() {
+        return "ShoppingItem{" + ", name=" + name + ", quantity=" + count + ", price=" + itemPrice + '}';
     }
 }

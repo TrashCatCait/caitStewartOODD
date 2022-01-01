@@ -4,6 +4,7 @@
  */
 package com.solent.cait.oodd.dto;
 
+import javax.persistence.Embeddable;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;

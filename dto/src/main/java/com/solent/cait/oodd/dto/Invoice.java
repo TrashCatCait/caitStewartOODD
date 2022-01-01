@@ -6,6 +6,7 @@ package com.solent.cait.oodd.dto;
 
 
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.CascadeType;
@@ -13,15 +14,22 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Column;
+import javax.persistence.Embedded;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
+import javax.persistence.ManyToOne;
+import javax.validation.Valid;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
+import javax.persistence.PrimaryKeyJoinColumn;
+import javax.persistence.SecondaryTable;
 
 /**
  *
  * @author caitlyn
  */
 @Entity
+@SecondaryTable(name = "Items", pkJoinColumns = @PrimaryKeyJoinColumn(name = "meal_id"))
 public class Invoice {
 
     private Long id;
@@ -32,7 +40,7 @@ public class Invoice {
 
     private Double amountDue;
     
-    private List<PurchasedItem> purchasedItems;
+    private List<PurchasedItem> purchasedItems = new ArrayList<>();
     
     private User purchaser;
     
@@ -147,7 +155,7 @@ public class Invoice {
     }
     
     /*
-    * Cascade type persit used as the program runs into and exception without it.
+    * Cascade type All used as the program runs into and exception without it.
     * seeming to be releasted to the fact that the item entity realted to purchasedItem
     * Isn't persitant otherwise.
     */
@@ -156,7 +164,9 @@ public class Invoice {
      * 
      * @return 
      */
-    @OneToMany(cascade = CascadeType.PERSIST)
+   
+    @Embedded    
+    @OneToMany(cascade=CascadeType.ALL)
     public List<PurchasedItem> getPurchasedItems() {
         return purchasedItems;
     }

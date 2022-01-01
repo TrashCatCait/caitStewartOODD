@@ -20,9 +20,9 @@
     <h4>Bought by: ${orderDetails.username}</h4>
     <ul>
         <c:forEach var="items" items="${orderDetails.getPurchasedItems()}">
-            <li>Item Name: ${items.item.name}</li>
-            <li>Price: ${items.item.price}</li> 
-            <li>Amount Bought: ${items.count}</li>
+            <li>Item Name: ${items.name}</li>
+            <li>Price: ${items.price}</li> 
+            <li>Amount Bought: ${items.getQuantity()}</li>
         </c:forEach>
             <li>Order Total: ${orderDetails.amountDue}</li>
             <li>Date Of Purchase: ${orderDetails.dateOfPurchase}</li>

@@ -122,8 +122,12 @@ public class ShoppingServiceImpl implements ShoppingService {
             }
             
             PurchasedItem purchased = new PurchasedItem();
-            purchased.setItem(item);
-            purchased.setCount(item.getQuantity());
+            purchased.setName(item.getName());
+            purchased.setPrice(item.getPrice());
+            purchased.setType(item.getType());
+            purchased.setUuid(item.getUuid());
+            
+            purchased.setQuantity(item.getQuantity());
             pitems.add(purchased);
         }
         newInvoice.setPurchasedItems(pitems);
