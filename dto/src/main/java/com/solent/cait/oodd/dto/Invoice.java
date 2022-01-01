@@ -154,17 +154,12 @@ public class Invoice {
         this.amountDue = amountDue;
     }
     
-    /*
-    * Cascade type All used as the program runs into and exception without it.
-    * seeming to be releasted to the fact that the item entity realted to purchasedItem
-    * Isn't persitant otherwise.
-    */
     
     /**
      * 
      * @return 
      */
-   
+    //Got the idea for this from here https://www.baeldung.com/jpa-mapping-single-entity-to-multiple-tables
     @Embedded    
     @OneToMany(cascade=CascadeType.ALL)
     public List<PurchasedItem> getPurchasedItems() {
