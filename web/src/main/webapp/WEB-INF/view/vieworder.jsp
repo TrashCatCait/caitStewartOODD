@@ -19,10 +19,10 @@
     <h3>Order Number: ${orderDetails.invoiceNumber}</h3>
     <h4>Bought by: ${orderDetails.username}</h4>
     <ul>
-        <c:forEach var="item" items="${orderDetails.getPurchasedItems()}">
-            <li>Item Name: ${item.name}</li>
-            <li>Price: ${item.price}</li> 
-            <li>Amount Bought: ${item.quantity} (Order quantity currently seems to be bugged)</li>
+        <c:forEach var="items" items="${orderDetails.getPurchasedItems()}">
+            <li>Item Name: ${items.item.name}</li>
+            <li>Price: ${items.item.price}</li> 
+            <li>Amount Bought: ${items.count}</li>
         </c:forEach>
             <li>Order Total: ${orderDetails.amountDue}</li>
             <li>Date Of Purchase: ${orderDetails.dateOfPurchase}</li>

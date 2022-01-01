@@ -12,6 +12,7 @@ import java.util.UUID;
 import java.util.concurrent.ConcurrentHashMap;
 import com.solent.cait.oodd.model.ShoppingService;
 import com.solent.cait.oodd.dto.Item;
+import com.solent.cait.oodd.dto.PurchasedItem;
 import com.solent.cait.oodd.dao.ItemCatalogRepository;
 import com.solent.cait.oodd.dao.InvoiceRepository;
 import com.solent.cait.oodd.dto.Invoice;
@@ -70,6 +71,7 @@ public class ShoppingServiceImpl implements ShoppingService {
     @Override
     public Boolean purchaseItems(List<Item> items, Double total, User user, CreditCard purchaseCard) {
         Invoice newInvoice = new Invoice();
+        List<PurchasedItem> pitems = new ArrayList<>();
         //I don't know why the items are display the wrong quantity on order screen because they work out the basket
         //Quantity okay it's very weird.
         LOG.info(items);
@@ -105,8 +107,13 @@ public class ShoppingServiceImpl implements ShoppingService {
                 repoItem.get().setQuantity(repoItem.get().getQuantity() - item.getQuantity());
                 itemRepo.save(repoItem.get());
             }
+            
+            PurchasedItem purchased = new PurchasedItem();
+            purchased.setItem(item);
+            purchased.setCount(item.getQuantity());
+            pitems.add(purchased);
         }
-        newInvoice.setPurchasedItems(items);
+        newInvoice.setPurchasedItems(pitems);
         invoiceRepo.save(newInvoice);
         
         return true;

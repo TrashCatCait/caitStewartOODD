@@ -33,7 +33,7 @@ public class Invoice {
 
     private Double amountDue;
     
-    private List<Item> purchasedItems;
+    private List<PurchasedItem> purchasedItems;
     
     @Column(name="user")
     private User purchaser;
@@ -97,12 +97,12 @@ public class Invoice {
         this.amountDue = amountDue;
     }
 
-    @ManyToMany
-    public List<Item> getPurchasedItems() {
+    @OneToMany
+    public List<PurchasedItem> getPurchasedItems() {
         return purchasedItems;
     }
 
-    public void setPurchasedItems(List<Item> purchasedItems) {
+    public void setPurchasedItems(List<PurchasedItem> purchasedItems) {
         this.purchasedItems = purchasedItems;
     }
 
