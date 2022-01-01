@@ -48,7 +48,6 @@
     </Class>
     <Interface name="ShoppingService" package="" visibility="public" xPosition="329.0" yPosition="240.0">
       <Methods>
-        <Method name="getStockedItems" returnType="List&lt;Item&gt;" visibility="public"/>
         <Method name="purchaseItems" returnType="Boolean" visibility="public">
           <Argument type="List&lt;Item&gt;" name="items"/>
           <Argument type="Double" name="total"/>
@@ -119,11 +118,11 @@
     </Enum>
   </ClassDiagramComponents>
   <ClassDiagramRelations>
-    <UseRelation name="" source="Invoice" target="User" sourceCardinality="1..1" targetCardinality="0..*"/>
-    <UseRelation name="Shopping Service Uses Item" source="ShoppingService" target="Item" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Uses Shopping Service" source="WebApp JSP Frontend" target="ShoppingService" sourceCardinality="1..1" targetCardinality="1..1"/>
-    <UseRelation name="Creates " source="ShoppingService" target="Invoice" sourceCardinality="1..1" targetCardinality="0..*"/>
     <UseRelation name="Uses Items" source="UserBasket" target="Item" sourceCardinality="1..1" targetCardinality="0..*"/>
+    <UseRelation name="Creates " source="ShoppingService" target="Invoice" sourceCardinality="1..1" targetCardinality="0..*"/>
     <UseRelation name="Uses Basket" source="ShoppingService" target="UserBasket" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="Shopping Service Uses Item" source="ShoppingService" target="Item" sourceCardinality="1..1" targetCardinality="1..1"/>
+    <UseRelation name="" source="Invoice" target="User" sourceCardinality="1..1" targetCardinality="0..*"/>
+    <UseRelation name="Uses Shopping Service" source="WebApp JSP Frontend" target="ShoppingService" sourceCardinality="1..1" targetCardinality="1..1"/>
   </ClassDiagramRelations>
 </ClassDiagram>
