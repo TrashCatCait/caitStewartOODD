@@ -4,11 +4,7 @@ package com.solent.cait.oodd.service.test;
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-/**
- *
- * @author caitlyn
- * Basic Test class to make sure credit card Checker returns expected outputs;
- */
+
 import org.junit.Before;
 import org.junit.Test;
 import static org.junit.Assert.*;
@@ -18,7 +14,11 @@ import com.solent.cait.oodd.dto.User;
 import com.solent.cait.oodd.bank.dto.CreditCard;
 import com.solent.cait.oodd.service.CardChecker;
 
-
+/**
+ *
+ * @author caitlyn
+ * Basic Test class to make sure credit card Checker returns expected outputs;
+ */
 public class CardCheckerTest {
 
     private CreditCard shoppingServiceCard;

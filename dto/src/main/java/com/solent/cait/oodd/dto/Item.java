@@ -12,6 +12,10 @@ import javax.persistence.Id;
 /**
  *
  * @author caitlyn
+ * 
+ * Public class Item 
+ * stored in Item Repository and represents an item available for purchase from the online store
+ * Is converted to Purchased it or rather stored in purchase item once checkout is called.
  */
 
 @Entity
@@ -27,62 +31,118 @@ public class Item {
         
     }
 
+    /**
+     * 
+     * @param name
+     * @param itemPrice 
+     */
     public Item(String name, Double itemPrice) {
         this.name = name;
         this.itemPrice = itemPrice;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
 
+    /**
+     * 
+     * @param id 
+     */
     public void setId(Long id) {
         this.id = id;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public String getUuid() {
         return uuid;
     }
 
-    public void setUuid(String uuuid) {
-        this.uuid = uuuid;
+    /**
+     * 
+     * @param uuid 
+     */
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
     }
 
-
+    /**
+     * 
+     * @return 
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * 
+     * @param name 
+     */
     public void setName(String name) {
         this.name = name;
     }
-
+    
+    /**
+     * 
+     * @return 
+     */
     public Integer getQuantity() {
         return count;
     }
 
+    /**
+     * 
+     * @param count 
+     */
     public void setQuantity(Integer count) {
         this.count = count;
     }
 
+    /**
+     * 
+     * @return 
+     */
     public Double getPrice() {
         return itemPrice;
     }
 
+    /**
+     * 
+     * @param itemPrice 
+     */
     public void setPrice(Double itemPrice) {
         this.itemPrice = itemPrice;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public String getType() {
         return type;
     }
     
+    /**
+     * 
+     * @param type 
+     */
     public void setType(String type) {
         this.type = type;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Override
     public String toString() {
         return "ShoppingItem{" + ", name=" + name + ", quantity=" + count + ", price=" + itemPrice + '}';

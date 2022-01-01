@@ -15,18 +15,53 @@ import com.solent.cait.oodd.bank.dto.CreditCard;
  * @author caitlyn
  */
 public interface ShoppingService {
-
+    
+    /**
+     * 
+     * @return 
+     */
     List<Item> getAviliableItems();
 
+    /**
+     * 
+     * @param item 
+     */
     void addItem(Item item);
 
+    /**
+     * 
+     * @param items
+     * @param total
+     * @param user
+     * @param purchaseCard
+     * @return 
+     */
     Boolean purchaseItems(List<Item> items, Double total, User user, CreditCard purchaseCard);
 
+    /**
+     * 
+     * @param Id 
+     */
     void removeItemById(Long Id);
 
+    /**
+     * 
+     * @param id
+     * @return 
+     */
     Boolean ItemExistsId(Long id);
 
+    /**
+     * 
+     * @param id
+     * @return 
+     */
     Item getItemById(Long id);
 
+    /**
+     * 
+     * @param searchStr
+     * @return 
+     */
     List<Item> getItemsByString(String searchStr);
 }

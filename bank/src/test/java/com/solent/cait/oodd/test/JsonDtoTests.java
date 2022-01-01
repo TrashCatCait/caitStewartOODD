@@ -18,7 +18,8 @@ import com.solent.cait.oodd.bank.dto.TransactionRequest;
 
 /**
  *
- * @author cgallen
+ * @author caitlyn
+ * Test Module to test the Json used by Jackson to make sure it can be read correctly
  */
 public class JsonDtoTests {
 

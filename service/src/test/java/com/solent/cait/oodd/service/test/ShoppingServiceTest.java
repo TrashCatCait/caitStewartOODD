@@ -19,7 +19,9 @@ import java.util.UUID;
 
 /**
  *
- * @author cgallen
+ * @author caitlyn
+ * Tests that the shopping service works unfortanutaly can't test other features
+ * as the beans have not been created or autowired yet so trying to use them causes errors
  */
 public class ShoppingServiceTest {
     

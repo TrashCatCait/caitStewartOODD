@@ -14,6 +14,8 @@ import com.solent.cait.oodd.bank.service.BankClientImpl;
 /**
  *
  * @author cgallen
+ * 
+ * Creates service objects to be used for this program so that these items can be called at program runtime.
  */
 public class ServiceObjectFactory {
     

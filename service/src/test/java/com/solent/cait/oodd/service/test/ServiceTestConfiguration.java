@@ -14,7 +14,7 @@ import org.springframework.context.annotation.PropertySource;
 
 /**
  *
- * @author cgallen
+ * @author caitlyn
  */
 @Configuration
 @Import(ServiceConfiguration.class)

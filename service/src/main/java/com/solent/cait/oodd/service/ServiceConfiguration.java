@@ -13,6 +13,9 @@ import com.solent.cait.oodd.dao.JPAPersistenceConfig;
 /**
  *
  * @author caitlyn
+ * 
+ * Creates a configuration for the springboot service instance of the DAOs using 
+ * the Import JPAPersistence config class
  */
 @Configuration
 

@@ -17,13 +17,14 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import static org.junit.Assert.*;
 import com.solent.cait.oodd.dao.ItemCatalogRepository;
-import com.solent.cait.oodd.dao.ItemCatalogRepository;
 import com.solent.cait.oodd.dto.Item;
 import java.util.List;
 
 /**
  *
  * @author caitlyn
+ * Item catalog test unit goes through and tests the item dao test unit to ensure it works as intented.
+ * Testing features such as deletion, creation and searching for items in the database.
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DAOTestConfiguration.class, loader = AnnotationConfigContextLoader.class)

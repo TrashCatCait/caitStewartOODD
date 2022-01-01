@@ -12,11 +12,27 @@ import java.util.List;
  * @author caitlyn
  */
 public interface UserBasket {
+    /**
+     * 
+     * @return 
+     */
     List<Item> getCurrentBasketItems();
     
+    /**
+     * 
+     * @param item 
+     */
     void addItemToBasket(Item item);
     
+    /**
+     * 
+     * @param itemUUID 
+     */
     void removeItem(String itemUUID);
 
+    /**
+     * 
+     * @return 
+     */
     double getTotal();
 }

@@ -16,7 +16,8 @@ import com.solent.cait.oodd.bank.security.PasswordUtils;
 
 /**
  *
- * @author gallenc
+ * @author caitlyn
+ * Tests the banks password Utils to make sure they work correctly
  */
 public class PasswordUtilsTest {
 

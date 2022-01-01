@@ -1,8 +1,6 @@
 package com.solent.cait.oodd.web;
 
-import java.io.PrintWriter;
 import java.util.UUID;
-import java.io.StringWriter;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
@@ -14,7 +12,6 @@ import com.solent.cait.oodd.model.ShoppingService;
 import com.solent.cait.oodd.model.UserBasket;
 import com.solent.cait.oodd.dto.User;
 import com.solent.cait.oodd.dto.Roles;
-import com.solent.cait.oodd.dao.UserRepository;
 import com.solent.cait.oodd.dao.InvoiceRepository;
 import com.solent.cait.oodd.dto.Invoice;
 import com.solent.cait.oodd.dto.InvoiceStatus;
@@ -34,8 +31,8 @@ import com.solent.cait.oodd.service.CardChecker;
 
 /**
  *
- * @author caitlyn
- * Class to control the server routing for the main shopping application 
+ * @author caitlyn Class to control the server routing for the main shopping
+ * application
  */
 @Controller
 @RequestMapping("/")
@@ -52,6 +49,11 @@ public class ServerController {
     @Autowired
     InvoiceRepository invoiceRepo;
 
+    /**
+     *
+     * @param session
+     * @return
+     */
     private User getSessionUser(HttpSession session) {
         //Get http user session and cast it to user type 
         User user = (User) session.getAttribute("sessionUser");
@@ -67,12 +69,27 @@ public class ServerController {
         }
     }
 
+    /**
+     *
+     * @param model
+     * @return
+     */
     //Set up root of index
     @RequestMapping(value = "/", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvroot(Model model) {
         return "redirect:/home";
     }
 
+    /**
+     *
+     * @param action
+     * @param itemIdStr
+     * @param uuid
+     * @param searchTxt
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/home", method = {RequestMethod.GET, RequestMethod.POST})
     public String srvhome(@RequestParam(name = "action", required = false) String action,
             @RequestParam(name = "itemId", required = false) String itemIdStr,
@@ -133,6 +150,12 @@ public class ServerController {
         return "home";
     }
 
+    /**
+     *
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/about", method = {RequestMethod.GET, RequestMethod.POST})
     public String about(Model model, HttpSession session) {
 
@@ -146,6 +169,12 @@ public class ServerController {
         return "about";
     }
 
+    /**
+     *
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/addItem", method = RequestMethod.GET)
     public String AddNewItem(Model model, HttpSession session) {
         User sessionUser = getSessionUser(session);
@@ -162,6 +191,17 @@ public class ServerController {
         }
     }
 
+    /**
+     *
+     * @param action
+     * @param itemName
+     * @param itemQuantityStr
+     * @param itemPriceStr
+     * @param itemType
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/addItem", method = RequestMethod.POST)
     public String AddNewItem(@RequestParam(value = "action", required = false) String action,
             @RequestParam(value = "itemName", required = false) String itemName,
@@ -204,6 +244,12 @@ public class ServerController {
         return "additem";
     }
 
+    /**
+     *
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/delItem", method = RequestMethod.GET)
     public String DeleteItem(Model model, HttpSession session) {
         User sessionUser = getSessionUser(session);
@@ -219,6 +265,14 @@ public class ServerController {
         }
     }
 
+    /**
+     *
+     * @param itemIdStr
+     * @param action
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/delItem", method = RequestMethod.POST)
     public String DeleteItem(@RequestParam(value = "itemId", required = true) String itemIdStr,
             @RequestParam(value = "action", required = false) String action,
@@ -253,6 +307,12 @@ public class ServerController {
         }
     }
 
+    /**
+     *
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/contact", method = {RequestMethod.GET, RequestMethod.POST})
     public String contactCart(Model model, HttpSession session) {
 
@@ -266,6 +326,17 @@ public class ServerController {
         return "contact";
     }
 
+    /**
+     *
+     * @param action
+     * @param cvv
+     * @param cardNum
+     * @param cardExpire
+     * @param nameOnCard
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/checkout", method = {RequestMethod.GET, RequestMethod.POST})
     public String Checkout(@RequestParam(name = "action", required = false) String action,
             @RequestParam(name = "cvv", required = false) String cvv,
@@ -278,29 +349,33 @@ public class ServerController {
         model.addAttribute("sessionUser", sessionUser);
         model.addAttribute("currentUser", sessionUser.getUsername());
         model.addAttribute("user", sessionUser);
-        
-        if(sessionUser.getUserRole().equals(Roles.ANONYMOUS)) {
+
+        if (sessionUser.getUserRole().equals(Roles.ANONYMOUS)) {
             model.addAttribute("errorMessage", "Sorry this page is only for customers");
             return "home";
         }
-        LOG.info("Checkout called");
         CardChecker checker = new CardChecker();
         /*Very Basic Credit Card Checker*/
         if (action != null) {
             if (action.equals("checkout")) {
-                if(cardNum == null) {
+                LOG.info("Checkout called");
+                if(userBasket.getCurrentBasketItems().isEmpty()) {
+                    model.addAttribute("errorMessage", "You need items in your baset to checkout");
+                    return "checkout";
+                }
+                if (cardNum == null) {
                     model.addAttribute("errorMessage", "Blank Card Number");
                     return "checkout";
                 }
-                if(cvv == null) {
+                if (cvv == null) {
                     model.addAttribute("errorMessage", "Blank Cvv");
                     return "checkout";
                 }
-                if(cardExpire == null) {
+                if (cardExpire == null) {
                     model.addAttribute("errorMessage", "Blank Expire date");
                     return "checkout";
                 }
-                if(nameOnCard == null || nameOnCard.length() == 0) {
+                if (nameOnCard == null || nameOnCard.length() == 0) {
                     model.addAttribute("errorMessage", "Blank name on card");
                     return "checkout";
                 }
@@ -330,16 +405,24 @@ public class ServerController {
                 userCard.setIssueNumber("01");
                 shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser, userCard);
                 LOG.info(userCard);
-                    userBasket = WebFactory.getNewBasket();
-                    model.addAttribute("message", "Checkout Successful");
-                    return "home";
-
+                userBasket = WebFactory.getNewBasket();
+                model.addAttribute("message", "Checkout Successful");
+                return "home";
 
             }
         }
         return "checkout";
     }
 
+    /**
+     *
+     * @param action
+     * @param itemIdStr
+     * @param uuid
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/basket", method = {RequestMethod.GET, RequestMethod.POST})
     public String Basket(@RequestParam(name = "action", required = false) String action,
             @RequestParam(name = "itemId", required = false) String itemIdStr,
@@ -380,6 +463,13 @@ public class ServerController {
         return "basket";
     }
 
+    /**
+     *
+     * @param idstr
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/viewOrder", method = {RequestMethod.GET, RequestMethod.POST})
     public String viewOrder(@RequestParam(name = "order", required = false) String idstr,
             Model model, HttpSession session) {
@@ -413,6 +503,14 @@ public class ServerController {
         }
     }
 
+    /**
+     *
+     * @param idstr
+     * @param status
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/modifyOrder", method = {RequestMethod.GET, RequestMethod.POST})
     public String viewOrder(@RequestParam(name = "orderId", required = false) String idstr,
             @RequestParam(name = "orderStatus", required = false) String status,
@@ -453,6 +551,18 @@ public class ServerController {
 
     }
 
+    /**
+     *
+     * @param action
+     * @param itemIdStr
+     * @param itemName
+     * @param itemQuantityStr
+     * @param itemPriceStr
+     * @param itemType
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/updateItem", method = {RequestMethod.GET, RequestMethod.POST})
     public String UpdateItems(@RequestParam(value = "action", required = false) String action,
             @RequestParam(value = "itemId", required = false) String itemIdStr,
@@ -518,6 +628,14 @@ public class ServerController {
         }
     }
 
+    /**
+     *
+     * @param model
+     * @param session
+     * @param searchStr
+     * @param action
+     * @return
+     */
     @RequestMapping(value = "/orders", method = {RequestMethod.GET, RequestMethod.POST})
     public String orders(Model model, HttpSession session,
             @RequestParam(value = "searchStr", required = false) String searchStr,
@@ -552,6 +670,13 @@ public class ServerController {
         }
     }
 
+    /**
+     *
+     * @param username
+     * @param model
+     * @param session
+     * @return
+     */
     @RequestMapping(value = "/myorders", method = {RequestMethod.GET, RequestMethod.POST})
     public String myOrders(@RequestParam(name = "user", required = false) String username,
             Model model, HttpSession session) {
@@ -576,6 +701,13 @@ public class ServerController {
         }
     }
 
+    /**
+     *
+     * @param e
+     * @param model
+     * @param request
+     * @return
+     */
     @ExceptionHandler(Exception.class)
     public String myExceptionHandler(final Exception e, Model model, HttpServletRequest request) {
         //logger.error(strStackTrace); // send to logger first

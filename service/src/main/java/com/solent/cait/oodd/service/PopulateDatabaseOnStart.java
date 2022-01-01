@@ -20,6 +20,9 @@ import com.solent.cait.oodd.dto.Roles;
 /**
  *
  * @author caitlyn
+ * 
+ * Populate databases just loads the system defaults into the database on program start
+ * so the webapp starts with a item and a customer and admin User.
  */
 @Component
 public class PopulateDatabaseOnStart {
@@ -39,7 +42,7 @@ public class PopulateDatabaseOnStart {
 
     @Autowired
     private UserRepository userRepository;
-    
+
     @PostConstruct
     public void initDatabase() {
 

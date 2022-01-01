@@ -9,16 +9,28 @@ import org.mindrot.jbcrypt.BCrypt;
 
 /**
  *
- * @author gallenc
+ * @author caitlyn
+ * Password utilities for the bank client
  */
 public class PasswordUtils {
     
+    /**
+     * 
+     * @param password
+     * @return 
+     */
     public static String hashPassword(String password){
         return BCrypt.hashpw(password, BCrypt.gensalt(12));
     }
     
-    public static boolean checkPassword(String password, String hashed){
-        return BCrypt.checkpw(password, hashed);
+    /**
+     * 
+     * @param password
+     * @param hash
+     * @return 
+     */
+    public static boolean checkPassword(String password, String hash){
+        return BCrypt.checkpw(password, hash);
     }
     
 }

@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
  *
  * @author caitlyn
  * Class to control the server routing for the log in control of the application
- *
+ * 
  */
 @Controller
 @RequestMapping("/")
@@ -32,6 +32,11 @@ public class LoginControl {
     @Autowired
     UserRepository userRepository;
 
+    /**
+     * 
+     * @param session
+     * @return 
+     */
     private User getSessionUser(HttpSession session) {
         //Get http user session and cast it to user type 
         User user = (User) session.getAttribute("sessionUser");
@@ -47,6 +52,12 @@ public class LoginControl {
         }
     }
 
+    /**
+     * 
+     * @param model
+     * @param session
+     * @return 
+     */
     @RequestMapping(value = "/logout", method = {RequestMethod.GET, RequestMethod.POST})
     public String logout(Model model, HttpSession session) {
         User userSession = getSessionUser(session);
@@ -59,6 +70,12 @@ public class LoginControl {
         return "home";
     }
 
+    /**
+     * 
+     * @param model
+     * @param session
+     * @return 
+     */
     @RequestMapping(value = "/login", method = {RequestMethod.GET})
     @Transactional
     public String login(Model model, HttpSession session) {
@@ -77,6 +94,15 @@ public class LoginControl {
         }
     }
 
+    /**
+     * 
+     * @param action
+     * @param username
+     * @param password
+     * @param model
+     * @param session
+     * @return 
+     */
     @RequestMapping(value = "/login", method = {RequestMethod.POST})
     @Transactional
     public String loginUser(@RequestParam(value = "action", required = false) String action,
@@ -123,6 +149,12 @@ public class LoginControl {
         return "home";
     }
 
+    /**
+     * 
+     * @param model
+     * @param session
+     * @return 
+     */
     @RequestMapping(value = "/register", method = {RequestMethod.GET})
     @Transactional
     public String register(Model model, HttpSession session) {
@@ -140,6 +172,16 @@ public class LoginControl {
         return "register";
     }
 
+    /**
+     * 
+     * @param action
+     * @param username
+     * @param password
+     * @param passwordConfirm
+     * @param model
+     * @param session
+     * @return 
+     */
     @RequestMapping(value = "/register", method = {RequestMethod.POST})
     @Transactional
     public String CreateNewUser(@RequestParam(value = "action", required = false) String action,
@@ -178,6 +220,12 @@ public class LoginControl {
         return "login";
     }
 
+    /**
+     * 
+     * @param model
+     * @param session
+     * @return 
+     */
     @RequestMapping(value = "/users", method = RequestMethod.GET)
     @Transactional
     public String getUsers(Model model, HttpSession session) {
@@ -198,6 +246,13 @@ public class LoginControl {
         return "users";
     }
 
+    /**
+     * 
+     * @param username
+     * @param model
+     * @param session
+     * @return 
+     */
     @RequestMapping(value = "/modifyUser", method = RequestMethod.GET)
     @Transactional
     public String UserDetails(@RequestParam(value = "user", required = false) String username,
@@ -225,6 +280,32 @@ public class LoginControl {
         }
     }
 
+    /**
+     * 
+     * @param action
+     * @param username
+     * @param firstName
+     * @param secondName
+     * @param addrLine1
+     * @param addrLine2
+     * @param houseNum
+     * @param postcode
+     * @param country
+     * @param county
+     * @param city
+     * @param mobile
+     * @param telephone
+     * @param userRole
+     * @param accountEnabled
+     * @param password
+     * @param passwordConfirm
+     * @param cardNumber
+     * @param cardExpire
+     * @param nameOnCard
+     * @param model
+     * @param session
+     * @return 
+     */
     @RequestMapping(value = "/modifyUser", method = RequestMethod.POST)
     @Transactional
     public String UpdateUserDetails(@RequestParam(value = "action", required = false) String action,
@@ -326,11 +407,23 @@ public class LoginControl {
 
     }
 
+    /**
+     * 
+     * @param e
+     * @param model
+     * @param request
+     * @return 
+     */
     @ExceptionHandler(Exception.class)
     public String myExceptionHandler(final Exception e, Model model, HttpServletRequest request) {
         //logger.error(strStackTrace); // send to logger first
-        model.addAttribute("error", e);
+        model.addAttribute("error", e);        
         LOG.warn(e);
+        LOG.warn(e.getMessage());
+        LOG.warn(e.getCause());
+        LOG.warn(e.getClass());
+        LOG.warn(e.getStackTrace());
+        LOG.warn(e.getLocalizedMessage());
         return "error"; // default friendly exception message for sessionUser
     }
 

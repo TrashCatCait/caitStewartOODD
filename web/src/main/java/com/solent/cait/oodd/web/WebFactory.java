@@ -13,6 +13,8 @@ import com.solent.cait.oodd.service.ServiceObjectFactory;
 /**
  *
  * @author caitlyn
+ * Web Factory calls service factory in order to get objects to be created for the web application such as the basket and 
+ * shopping service of the web application.
  */
 public class WebFactory {
 
@@ -23,10 +25,18 @@ public class WebFactory {
         
     }
     
+    /**
+     * 
+     * @return 
+     */
     public static ShoppingService getShoppingService(){
         return shoppingService;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public static UserBasket getNewBasket(){
         return ServiceObjectFactory.getNewBasket();
     }

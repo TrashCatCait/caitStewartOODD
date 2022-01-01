@@ -7,6 +7,7 @@ package com.solent.cait.oodd.dto;
 /**
  *
  * @author caitlyn
+ * Enumeration of all the User Roles used in the User class
  */
 public enum Roles {
     ANONYMOUS, CUSTOMER, ADMIN, DEACTIVATED

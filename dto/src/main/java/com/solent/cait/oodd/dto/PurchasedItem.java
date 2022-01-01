@@ -14,10 +14,12 @@ import javax.persistence.OneToOne;
 /**
  *
  * @author caitlyn
+ *
  * Item that is created at checkout this was to avoid a bug related to the quantities of orders being displayed
  * incorrectly due to the JPA lib always importing item as Foreign Key rather than a field in the invoice database
- * So like this is a little bit of a hack and I would've preferred to get the SQL to work right but this also works
+ * So this is a little bit of a hack/workaround and I would've preferred to get the SQL to work right but this also works
  * I also tried adding a quantity list directly to Invoice but that didn't work and cause more issues than it solved
+ * 
  */
 @Entity
 public class PurchasedItem {
@@ -26,28 +28,53 @@ public class PurchasedItem {
     private Item item;
     private int count;
     
+    /**
+     * 
+     * @return 
+     */
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     public Long getId() {
         return id;
     }
 
+    /**
+     * 
+     * @param id 
+     */
     public void setId(Long id) {
         this.id = id;
     }
     
+    /**
+     * 
+     * @return 
+     */
     public int getCount() {
         return count;
     }
     
+    /**
+     * 
+     * @param count 
+     */
     public void setCount(int count) {
         this.count = count;
     }
+    
+    /**
+     * 
+     * @return 
+     */
     @OneToOne
     public Item getItem() {
         return item;
     }
     
+    /**
+     * 
+     * @param item 
+     */
     public void setItem(Item item) {
         this.item = item;
     }

@@ -16,7 +16,8 @@ import java.util.UUID;
 
 /**
  *
- * @author cgallen
+ * @author caitlyn
+ * Goes through and tests all functions of the User basket and makes sure they all return as expected
  */
 public class UserBasketTest {
 

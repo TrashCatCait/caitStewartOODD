@@ -25,18 +25,27 @@ import org.springframework.web.context.WebApplicationContext;
 /**
  *
  * @author caitlyn
+ * Creates a configuration for the DAO beans used in the web application. 
+ * Allowing them to be Autowired and for the DAOs to be easyly setup for the app.
  */
 
 @Configuration
 @Import(ServiceConfiguration.class)
 @PropertySource("classpath:persistence-app.properties")
 public class SpringBootMainConfiguration {
+    /**
+     * 
+     * @return 
+     */
     @Bean
     ShoppingService getShoppingService() {
         return ServiceObjectFactory.getShoppingService();
     }
 
-    // see https://www.baeldung.com/spring-mvc-session-attributes
+    /**
+     * 
+     * @return 
+     */
     @Bean
     @Scope(value = WebApplicationContext.SCOPE_SESSION,
             proxyMode = ScopedProxyMode.TARGET_CLASS)

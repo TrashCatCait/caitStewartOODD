@@ -18,13 +18,16 @@ import com.solent.cait.oodd.bank.dto.TransactionReply;
 
 /**
  *
- * @author cgallen
+ * @author caitlyn
+ * Bank client Test is a class that should be used to transfer money between test bank clients 
+ * however it's currently broken and always return 404 hence why it's tests of the client
+ * is commented out to avoid failed tests.
  */
 public class BankClientTest {
 
     final static Logger LOG = LogManager.getLogger(BankClientTest.class);
 
-    String bankUrl = "http://localhost:8080/bank/rest";
+    String bankUrl = "http://localhost/bank/rest";
     CreditCard fromCard = null;
     CreditCard toCard = null;
     
@@ -57,7 +60,7 @@ public class BankClientTest {
         BankClient client = new BankClientImpl(bankUrl);
 
         Double amount = 0.0;
-        //Error cause bank keeps 404 ing unsure why
+        //Error cause bank keeps returning connection refused
 
         //TransactionReply reply = client.transferMoney(fromCard, toCard, amount);
         //LOG.debug("transaction reply:" + reply);
@@ -72,7 +75,7 @@ public class BankClientTest {
         BankClient client = new BankClientImpl(bankUrl);
 
         Double amount = 0.0;
-        //Error cause bank keeps 404 ing unsure why
+        //Error cause bank keeps returning connection refused
 
         // testing with auth
  

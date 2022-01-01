@@ -1,9 +1,5 @@
 package com.solent.cait.oodd.dao;
 
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -26,16 +22,20 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 /**
  *
  * @author caitlyn
+ * Creates and sets up JPA and the DAO's ready to be used.
  */
 @Configuration
 @EnableTransactionManagement
 @EnableJpaRepositories(basePackages = "com.solent.cait.oodd.dao")
-// @PropertySource("classpath:persistence-test.properties") // set in calling configuration
 public class JPAPersistenceConfig {
 
     @Autowired
     private Environment env;
 
+    /**
+     * 
+     * @return 
+     */
     // beans
     @Bean
     public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
@@ -50,6 +50,10 @@ public class JPAPersistenceConfig {
         return em;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Bean
     public DataSource dataSource() {
         final DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -74,6 +78,10 @@ public class JPAPersistenceConfig {
         return dataSource;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Bean
     public PlatformTransactionManager transactionManager() {
         final JpaTransactionManager transactionManager = new JpaTransactionManager();
@@ -81,11 +89,19 @@ public class JPAPersistenceConfig {
         return transactionManager;
     }
 
+    /**
+     * 
+     * @return 
+     */
     @Bean
     public PersistenceExceptionTranslationPostProcessor exceptionTranslation() {
         return new PersistenceExceptionTranslationPostProcessor();
     }
 
+    /**
+     * 
+     * @return 
+     */
     final Properties additionalProperties() {
         final Properties hibernateProperties = new Properties();
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", env.getProperty("hibernate.hbm2ddl.auto"));

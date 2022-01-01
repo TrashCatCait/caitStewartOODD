@@ -37,6 +37,8 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 /**
  *
  * @author caitlyn
+ * User repo test module goes through and tests the the features of the user repository to ensure it works as it's supposed to 
+ * with no unexpected errors
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(classes = DAOTestConfiguration.class, loader = AnnotationConfigContextLoader.class)

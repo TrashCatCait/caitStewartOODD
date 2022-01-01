@@ -13,7 +13,8 @@ import org.springframework.context.annotation.PropertySource;
 
 /**
  *
- * @author caitlyn
+ * @author caitlyn 
+ * Sets up the DAO configuration for the test modules to use
  */
 @Configuration
 @Import(JPAPersistenceConfig.class)

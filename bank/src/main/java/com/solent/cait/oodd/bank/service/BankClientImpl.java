@@ -36,18 +36,31 @@ import org.springframework.beans.factory.config.ConfigurableBeanFactory;
 /**
  *
  * @author caitlyn
+ * Implemetation of the bank client interface it's should handle money being sent from cards
+ * However it does not current work and always returns connection refused (I'm unsure why this is happening)
+ * 
  */
-
 public class BankClientImpl implements BankClient {
 
     final static Logger LOG = LogManager.getLogger(BankClientImpl.class);
 
     String urlStr;
 
+    /**
+     * 
+     * @param urlStr 
+     */
     public BankClientImpl(String urlStr) {
         this.urlStr = urlStr;
     }
 
+    /**
+     * 
+     * @param fromCard
+     * @param toCard
+     * @param amount
+     * @return 
+     */
     @Override
     public TransactionReply transferMoney(CreditCard fromCard, CreditCard toCard, Double amount) {
         LOG.debug("transferMoney called: ");
@@ -79,6 +92,15 @@ public class BankClientImpl implements BankClient {
 
     }
 
+    /**
+     * 
+     * @param fromCard
+     * @param toCard
+     * @param amount
+     * @param userName
+     * @param password
+     * @return 
+     */
     @Override
     public TransactionReply transferMoney(CreditCard fromCard, CreditCard toCard, Double amount, String userName, String password) {
         LOG.debug("transferMoney called: ");
@@ -113,6 +135,4 @@ public class BankClientImpl implements BankClient {
         return transactionReplyMessage;
 
     }
-
-
 }
