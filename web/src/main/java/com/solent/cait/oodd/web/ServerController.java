@@ -403,12 +403,13 @@ public class ServerController {
                 userCard.setEndDate(cardExpire);
                 userCard.setName(nameOnCard);
                 userCard.setIssueNumber("01");
-                shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser, userCard);
-                LOG.info(userCard);
-                userBasket = WebFactory.getNewBasket();
-                model.addAttribute("message", "Checkout Successful");
-                return "home";
-
+                if(shoppingService.purchaseItems(userBasket.getCurrentBasketItems(), userBasket.getTotal(), sessionUser, userCard)) {
+                    LOG.info(userCard);
+                    userBasket = WebFactory.getNewBasket();
+                    model.addAttribute("message", "Checkout Successful");
+                    return "home";
+                }
+                model.addAttribute("errorMessage", "Not Enough stock to make purchase");
             }
         }
         return "checkout";
